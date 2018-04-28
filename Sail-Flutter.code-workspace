@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "sail_flutter"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
+}

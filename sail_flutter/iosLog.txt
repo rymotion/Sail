@@ -1,0 +1,15 @@
+Launching lib/main.dart on iPhone X in debug mode...
+Running Xcode clean...
+Xcode build done
+Failed to build iOS app
+Error output from Xcode build:
+↳
+    ** BUILD FAILED **
+    
+Xcode's output:
+↳
+    === BUILD TARGET Runner OF PROJECT Runner WITH CONFIGURATION Debug ===
+    /Users/ryanpaglinawan/Desktop/Sail/Sail-Flutter/sail_flutter/ios/Runner/GeneratedPluginRegistrant.m:6:9: fatal error: 'flutter_web_view/FlutterWebViewPlugin.h' file not found
+    #import <flutter_web_view/FlutterWebViewPlugin.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1 error generated.
