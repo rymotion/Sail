@@ -6,61 +6,116 @@ import 'package:html/dom.dart';
 import 'dart:io';
 
 http.IOClient ioClient = new http.IOClient();
-final String url = 'http://www.csusb.edu/sail';
-String header = 'Header';
-String body = 'Body';
+String header = '';
+String body = '';
 Document document;
+final String baseURL = 'http://www.csusb.edu';
 
 //MARK:
 class ElementFormatter {
-
   String elementHeader;
   String elementURL;
   String elementAccessible;
 
-  ElementFormatter({this.elementHeader,this.elementURL,this.elementAccessible});
+  ElementFormatter({
+    this.elementHeader, this.elementURL, this.elementAccessible
+  });
 
   String get grabHeader => elementHeader;
   String get grabURL => elementHeader;
   String get grabAccess => elementAccessible;
+}
 
+class PageFormatter {
+  String header;
+  String subtitle;
+  List<Element> pageBody;
+  List<TableFormatter> table;
+
+  PageFormatter({
+    this.header, this.subtitle, this.pageBody, this.table
+  });
+
+  String get grabHeader => header;
+  String get grabSubtitle => subtitle;
+  List<Element> get grabPage => pageBody;
+  List<TableFormatter> get grabTable => table;
+}
+
+class TableFormatter {
+  String courseTitle;
+  String lecturer;
+  String courseSection;
+  String catalogNum;
+  String daySched;
+  String dateTime;
+  String roomCall;
+
+  TableFormatter({
+      this.courseTitle,
+      this.lecturer,
+      this.courseSection,
+      this.catalogNum,
+      this.daySched,
+      this.dateTime,
+      this.roomCall
+  });
+
+  String get courseHead => courseTitle;
+  String get lecName => lecturer;
+  String get courSec => courseSection;
+  String get catNum => catalogNum;
+  String get days => daySched;
+  String get timeSche => dateTime;
+  String get roomLoc => roomCall;
 }
 
 class Scrape {
+  List<TableFormatter> table = new List();
+  String lastUsed;
+  String url = '/sail';
+  String loadingURL;
 
-  String conCatURL;
+  Scrape() {
+    // set extention url based on instantiation
+    loadingURL = baseURL + url;
+    print('from Scrape:\n $loadingURL');
+  }
 
-  Scrape(this.conCatURL);
+  Scrape.setLoad(String url) {
+    lastUsed = baseURL;
+    loadingURL = baseURL + url;
+    print('from Scrape:\n $loadingURL');
+  }
 
-  Future <bool> get canAccess => _access();
-  Future <String> get getHeader => _parseHeader();
-  Future <String> get getBody => _parseBody();
-  Future <List<ElementFormatter>> get getNavigation => _navMenuGeneration();
-  Future <List<String>> get getLinks => _parseLinks();
-  Future <List<Datagram>> get getImages => _parseImages();
-
+  Future<bool> get canAccess => _access();
+  Future<String> get getHeader => _parseHeader();
+  Future<List<Element>> get getBody => _parseBody();
+  // Future<List<List<TableFormatter>>> get getTable => _tableParse();
+  Future<List<ElementFormatter>> get getNavigation => _navMenuGeneration();
+  Future<List<String>> get getLinks => _parseLinks();
+  Future<List<Datagram>> get getImages => _parseImages();
+  Future<List<Element>> get getContactMain => _getContact();
+  Future<List> get _internalHeader => _parseBodyHeader();
+  Future<List> get sideMenu => _getSideBar();
+  Future<List<Element>> get getPage => _pageElements();
+  // String get href() => _splitter(toSplit);
 //  MARK: Makes sure that site is accessible.
-  Future <bool> _access() async {
+  Future<bool> _access() async {
     useConsole();
-    bool timeout = false;
-    await _getWebResponse()
-        .then((Document responder) {
-          document = responder;
-          print("inside document");
-          for (var element in document.body.children) {
-            print("\n${element.outerHtml}\n");
-          }
-        });
-
-    return timeout;
+    document = await _getWebResponse();
+    if (document != null) {
+      return true;
+    }
+    return false;
   }
 
 // MARK: Web scraping code
-  Future <Document> _getWebResponse() async {
+  Future<Document> _getWebResponse() async {
     try {
-      http.Response response = await http.get(url);
+      http.Response response = await http.get(loadingURL);
       if (response.body.isNotEmpty) {
-        print('This is the webresponse:\n${response.body.split('\n')}');
+//        print('This is the webresponse:\n${response.body.split('\n')}');
         return parse(response.body);
       } else {
         print("\nNo connection.\n");
@@ -73,7 +128,8 @@ class Scrape {
   }
 
 // MARK: Gets and returns header module
-  Future <String> _parseHeader() async {
+  Future<String> _parseHeader() async {
+    document = await _getWebResponse();
     try {
       // for (var element in document.querySelectorAll("h2")) {
       //   print('The header on website: ${element.text}\n');
@@ -86,12 +142,111 @@ class Scrape {
     return header;
   }
 
-// MARK: Gets and returns data for body
-  Future <String> _parseBody() async {
+  Future<List<Element>> _getContact() async {
+    document = await _getWebResponse();
+    List<Element> contact = new List();
     try {
-      for (var element in document.querySelectorAll("article")) {
-        print('The is the body element: ${element.text}\n');
-        body = element.text;
+      for (var contactList in document.getElementsByClassName(
+          "entity entity-bean bean-csusb-bb-contact-block clearfix")) {
+        contactList.getElementsByTagName('p').forEach((f) {
+          contact.add(f);
+          print('${f.text}');
+        });
+      }
+      return contact;
+    } catch (e) {
+      print("Exception thrown: ${e.toString()}");
+    }
+
+  }
+
+  List<TableFormatter> _tableParse(Element tableData) {
+    List<TableFormatter> tempList = new List<TableFormatter>();
+    try {
+      for (var tableElements in tableData.getElementsByTagName('table')) {
+        tableElements.getElementsByTagName('tbody').forEach((f){
+          f.getElementsByTagName('tr').forEach((x){
+          // MARK: table for course table
+          print("table:\n ${x.getElementsByTagName('td')[0].text};\n ${x.getElementsByTagName('td')[1].text};\n ${x.getElementsByTagName('td')[2].text};\n ${x.getElementsByTagName('td')[3].text};\n ${x.getElementsByTagName('td')[4].text};\n ${x.getElementsByTagName('td')[5].text};\n ${x.getElementsByTagName('td')[6].text}");
+            tempList.add(new TableFormatter(
+              courseTitle: x.getElementsByTagName('td')[0].text,
+              lecturer: x.getElementsByTagName('td')[1].text,
+              courseSection: x.getElementsByTagName('td')[2].text,
+              catalogNum: x.getElementsByTagName('td')[3].text,
+              daySched: x.getElementsByTagName('td')[4].text,
+              dateTime: x.getElementsByTagName('td')[5].text,
+              roomCall: x.getElementsByTagName('td')[6].text,
+            ));
+          });
+          print("break from loop");
+          tempList.add(new TableFormatter(
+            courseTitle: "",
+            lecturer: "",
+            courseSection: "",
+            catalogNum: "",
+            daySched: "",
+            dateTime: "",
+            roomCall: "",
+          ));
+        });
+      }
+      return tempList;
+    } catch (e) {}
+  }
+// MARK: The headers and pre/post text of each table in view
+  List<Element> _tableHeading(Element elementDocument) {
+    // document = await _getWebResponse();
+    List<Element> elementData = new List<Element>();
+    try {
+      for (var elementIn in document.getElementsByClassName("region region-content")) {
+        for (var headingElements in elementIn.getElementsByClassName('field-item even')) {
+          for(var i = 0; i < elementIn.getElementsByClassName('field-item even').length; i++){
+            // elementData.add(headingElements.getElementsByTagName('h2')[i]);
+            // print("Inner data: ${elementData.last.outerHtml}");
+            // headingElements.getElementsByTagName('p')[i].text != "" ? elementData.add(headingElements.getElementsByTagName('p')[i]) : print("No Data for p.");
+            // print("Inner data: ${elementData.last.outerHtml}");
+            headingElements.getElementsByTagName('center')[i].text != "" ? elementData.add(headingElements.getElementsByTagName('center')[i]) : print("No Data for center.");
+            print("Inner data: ${elementData.last.outerHtml}");
+            // headingElements.getElementsByTagName('ul')[i].text != "" ? elementData.add(headingElements.getElementsByTagName('ul')[i]) : print("No Data for ul.");
+            // print("Inner data: ${elementData.last.outerHtml}");
+          }
+        }
+      }
+      return elementData;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+// MARK: Gets and returns data for body
+  Future<List<Element>> _parseBody() async {
+    document = await _getWebResponse();
+    List<Element> body = new List();
+    try {
+      for (var element in document.getElementsByClassName("region region-content")) {
+        if (element.getElementsByTagName('table').isNotEmpty) {
+          element.querySelector('table').remove();
+        } else {
+          var previousElement = element.getElementsByTagName('h2').first;
+          body.add(element.getElementsByTagName('h2').first);
+            print(element.getElementsByClassName('field-item even').length);
+            element.getElementsByClassName('field field-name-field-pa-center-content field-type-text-long field-label-hidden').forEach((item){
+              // item.firstChild.remove();
+
+              for (var title in item.getElementsByTagName('h2')) {
+                print(title.innerHtml);
+                previousElement == title ? print('alternate header failed') : body.add(title);
+              }
+              for (var div in item.getElementsByTagName('p')) {
+                print(div.innerHtml);
+                body.add(div);
+              }
+              for (var bullet in item.getElementsByTagName('ul')) {
+                print(bullet.innerHtml);
+                body.add(bullet);
+              }
+            });
+        }
       }
     } catch (e) {
       print('${e.toString()}');
@@ -99,12 +254,24 @@ class Scrape {
     return body;
   }
 
+  Future<List> _parseBodyHeader() async {
+    document = await _getWebResponse();
+
+    List headList = [];
+    document.querySelectorAll("h2").forEach((f) {
+      headList.add(f);
+      print(f);
+    });
+    return headList;
+  }
+
 // MARK: Gets the link metadata
-  Future <List<String>> _parseLinks() async {
+  Future<List<String>> _parseLinks() async {
+    document = await _getWebResponse();
     List<String> links;
     try {
       for (var element in document.querySelectorAll("article")) {
-        print('The is the body element: ${element.text}\n');
+//        print('The is the body element: ${element.text}\n');
         body = element.text;
       }
     } catch (e) {
@@ -113,46 +280,58 @@ class Scrape {
     return links;
   }
 
-  String _splitter(String toSplit) {
+  String splitter(Element toSplit) {
     int matchIndex = 0;
     int startIndex = 0;
-    print('Splitter:\n');
 
-    if (toSplit.contains('href')){
-      // MARK: i is used to store the initial index of string
-      for (var i = 0; i < toSplit.length; i++) {
-        // Find first instance of "
-        if ('"' == toSplit[i] && startIndex == 0) {
-          print('Found beginning instance of " in ${i.toString()}\n');
-          i++;
-          startIndex = i;
-        } else if ('"' == toSplit[i] && matchIndex == 0){
-          print('Found ending instance of " in ${i.toString()}\n');
-          matchIndex = i;
+    String extract;
+    print('Splitter:\n');
+    if (toSplit.getElementsByTagName('a').isNotEmpty) {
+      toSplit.getElementsByTagName('a').forEach((f) {
+        print('not empty');
+        var temp = f.outerHtml;
+        print(temp);
+        if (temp.contains("href")) {
+          for (var i = 0; i < temp.length; i++) {
+            // Find first instance of "
+            if ('"' == temp[i] && startIndex == 0) {
+//          print('Found beginning instance of " in ${i.toString()}\n');
+              i++;
+              startIndex = i;
+            } else if ('"' == temp[i] && matchIndex == 0) {
+//          print('Found ending instance of " in ${i.toString()}\n');
+              matchIndex = i;
+            }
+          }
+          // print('in supstring: ${temp.substring(startIndex, matchIndex)}');
+          try {
+            extract = temp.substring(startIndex, matchIndex);
+          } catch (e){
+            print("Error thrown here");
+          }
         }
-      }
+      });
     }
-    toSplit = toSplit.substring(startIndex, matchIndex);
-    print("This is the substring: \n$toSplit");
-    return toSplit;
+    print(extract);
+    return extract;
   }
 
-  Future <List<ElementFormatter>> _navMenuGeneration() async {
+  Future<List<ElementFormatter>> _navMenuGeneration() async {
+    document = await _getWebResponse();
     var navMenu = new List<ElementFormatter>();
-    print('Nav Menu:\n');
+//    print('Nav Menu:\n');
     try {
-      for(var element in document.getElementsByClassName("menu-block-wrapper menu-block-249 menu-name-menu-sail-student-assistance-in- parent-mlid-0 menu-level-2")){
-        for (var check in element.nodes){
-          for (var internal in check.children){
-            var menuElement = new ElementFormatter(
-              elementHeader: internal.text,
-              elementURL: _splitter(internal.innerHtml),
+      for (var element in document.getElementsByClassName(
+          "menu-block-wrapper menu-block-249 menu-name-menu-sail-student-assistance-in- parent-mlid-0 menu-level-2")) {
+        for (var check in element.nodes) {
+          print('Node: ${check.children.toString()}');
+          for (var internal in check.children) {
+            print(internal.innerHtml);
+            navMenu.add(ElementFormatter(
               elementAccessible: '',
-            );          
-            print('URL inner:\n\n${_splitter(internal.innerHtml)}\n\n');
-            print('Title:\n\n${internal.text}\n\n');
-
-            navMenu.add(menuElement);
+              elementHeader: internal.text,
+              elementURL: splitter(internal),
+            ));
           }
         }
       }
@@ -163,10 +342,46 @@ class Scrape {
     return navMenu;
   }
 
+Future<List> _getSideBar() async{
+  document = await _getWebResponse();
+  try{
+    print('sidebar navigation menu');
+    document.getElementsByTagName('ul').forEach((f){
+      for (var items in document.getElementsByClassName('manu nav')) {
+      print('${items.innerHtml}');
+    }
+    });
+  } catch (e){
+    print('${e.toString()}');
+  }
+}
+
 // MARK: Gets and picture metadata
-  Future <List<Datagram>> _parseImages() async {
+  Future<List<Datagram>> _parseImages() async {
+    document = await _getWebResponse();
     List<Datagram> images;
     return images;
+  }
+
+  Future <List<Element>> _pageElements() async {
+    document = await _getWebResponse();
+    List<Element> currentPage = new List<Element>();
+    try{
+      for (var elements in document.getElementsByClassName("region region-content")) {
+        for (var items in elements.getElementsByClassName("field field-name-field-pa-center-content field-type-text-long field-label-hidden")){
+          for (var data in items.getElementsByClassName("field-item even")){
+            data.children.forEach((f){
+              f.children.forEach((x){
+                currentPage.add(x);
+              });
+            });
+          }
+        }
+      }
+      return currentPage;
+    } catch (e){
+      print('${e.toString()}');
+    }
   }
 }
 
