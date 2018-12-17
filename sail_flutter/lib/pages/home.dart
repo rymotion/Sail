@@ -108,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: new SafeArea(
           child: new RefreshIndicator(
             // child: new Text("$header"),
+            // TODO: add instagram feed and program contact details
             child: _buildContext(),
             onRefresh: _refreshHandler,
           ),
@@ -157,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: new RichText(
                         textAlign: TextAlign.start,
                         text: new TextSpan(
-                          text: ' ${snapshot.data[index].text}',
+                          text: '${snapshot.data[index].text}',
                           style: (href != null)
                               ? new TextStyle(
                                   color: Colors.blue,
@@ -182,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: new RichText(
                         textAlign: TextAlign.start,
                         text: new TextSpan(
-                          text: ' ${snapshot.data[index].text}',
+                          text: '${snapshot.data[index].text}',
                           style: (href != null)
                               ? new TextStyle(
                                   color: Colors.blue,

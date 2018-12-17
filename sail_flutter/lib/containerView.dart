@@ -11,6 +11,8 @@ import './Scrape.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:url_launcher/url_launcher.dart';
 import './pages/studentID.dart';
+import './pages/contactPage.dart';
+import './pages/alumniPage.dart';
 
 List<ElementFormatter> list = [];
 StatefulWidget loadedWidget;
@@ -34,9 +36,9 @@ class _MainDrawerState extends State<MainDrawer> {
     super.dispose();
     // TODO: add cache to menu
     list = [];
-    loadedWidget;
+    // loadedWidget;
     loadURL = '/home';
-    scraper;
+    // scraper;
     header = "";
   }
 
@@ -82,6 +84,11 @@ class _MainDrawerState extends State<MainDrawer> {
       elementAccessible: "",
     ));
     list.add(new ElementFormatter(
+      elementHeader: "Contact us",
+      elementURL: "/contact",
+      elementAccessible: "",
+    ));
+    list.add(new ElementFormatter(
       elementHeader: "Event Check-In",
       elementURL: "/check-in",
       elementAccessible: "",
@@ -104,7 +111,7 @@ class _MainDrawerState extends State<MainDrawer> {
       case "/sail/sail-alumni":
         print("\nalumni load\n");
         // scraper.loadingURL = scraper.lastUsed + newWidget;
-        newPage = new GenericPage.setScraper(
+        newPage = new AlumniPage.setScraper(
             (scraper = new Scrape.setLoad(newWidget)));
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => newPage));
@@ -128,11 +135,7 @@ class _MainDrawerState extends State<MainDrawer> {
         break;
       case "/sail":
         // scraper.loadingURL = scraper.lastUsed + newWidget;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => new GenericPage.setScraper(
-                    (scraper = new Scrape.setLoad(newWidget)))));
+        Navigator.pop(context);
         break;
       case "/calendar":
         Navigator.push(context,
@@ -146,6 +149,10 @@ class _MainDrawerState extends State<MainDrawer> {
       case "/check-in":
         Navigator.push(context,
             new MaterialPageRoute(builder: (context) => new ScanID()));
+        break;
+      case "/contact":
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new ContactPage()));
         break;
       default:
         _checkLaunch(newWidget);
@@ -259,22 +266,22 @@ class _MainDrawerState extends State<MainDrawer> {
     changeBody(newWidget);
   }
 
-  void _tapDown(TapDownDetails details){
-    setState((){
-      hasTapped = true;
-    });
-  }
+  // void _tapDown(TapDownDetails details){
+  //   setState((){
+  //     hasTapped = true;
+  //   });
+  // }
 
-  void _tapUp(TapUpDetails details){
-    setState((){
-      hasTapped = false;
-    });
-  }
-  void _tapCancel(){
-    setState((){
-      hasTapped = false;
-    });
-  }
+  // void _tapUp(TapUpDetails details){
+  //   setState((){
+  //     hasTapped = false;
+  //   });
+  // }
+  // void _tapCancel(){
+  //   setState((){
+  //     hasTapped = false;
+  //   });
+  // }
   
   Widget buildContact() {
     return new FutureBuilder(

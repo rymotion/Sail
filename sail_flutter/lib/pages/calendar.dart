@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:googleapis/calendar/v3.dart';
 import '../CalDevParse.dart';
+import '../pages/detailScreen.dart';
 
 final CalDevParse calendarHandler = new CalDevParse();
 
@@ -40,12 +41,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }).catchError((onError) => debugPrint('Error:\n$onError'));
   }
 
-  String check() {
-    return isOpen ? "The Harbor is in use" : "The Harbor is open";
+  String check(Events data) {
+    return data.items.isNotEmpty
+        ? "The Harbor is in use"
+        : "The Harbor is open";
   }
 
-  Color setColor() {
-    return isOpen
+  Color setColor(Events data) {
+    return data.items.isNotEmpty
         ? const Color.fromRGBO(100, 0, 0, 100.0)
         : const Color.fromRGBO(0, 100, 0, 100.0);
   }
@@ -57,64 +60,100 @@ class _CalendarScreenState extends State<CalendarScreen> {
         title: new Text('Sail Harbor'),
       ),
       body: new SafeArea(
-        child: new ListView(
-          children: <Widget>[
-            // This text widget will be a function call to see if open
-            new RefreshIndicator(
-                child: new Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: new FutureBuilder(
-                    future: calendarHandler.roomAvailable,
-                    builder:
-                        (BuildContext context, AsyncSnapshot<Events> snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.active:
-                          return new Container(
-                            height: 100.0,
-                            width: 100.0,
-                            child: CircularProgressIndicator(),
-                          );
-                          break;
-                        case ConnectionState.waiting:
-                          return new Container(
-                            height: 100.0,
-                            width: 100.0,
-                            child: CircularProgressIndicator(),
-                          );
-                          break;
-                        case ConnectionState.none:
-                          print("Error");
-                          break;
-                        case ConnectionState.done:
-                          setState() {
-                            isOpen = snapshot.data.items.isEmpty;
-                          };
-                          return new Text("${check()}");
-                          break;
-                      }
-                    },
-
-                  ),
-                ),
-                onRefresh: _handleRefresh),
-
-            new Divider(),
-
-            new Container(
+        child: new RefreshIndicator(
+            child: new Container(
               padding: const EdgeInsets.all(10.0),
-              child: new Text(
-                'Current daily schedule for the harbor.',
-                style: new TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: const Color.fromRGBO(0, 0, 0, 100.0),
-                ),
-                textAlign: TextAlign.center,
+              child: new FutureBuilder(
+                future: calendarHandler.roomAvailable,
+                builder:
+                    (BuildContext context, AsyncSnapshot<Events> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.active:
+                      return new Container(
+                        height: 100.0,
+                        width: 100.0,
+                        child: CircularProgressIndicator(),
+                      );
+                      break;
+                    case ConnectionState.waiting:
+                      return new Container(
+                        height: 100.0,
+                        width: 100.0,
+                        child: CircularProgressIndicator(),
+                      );
+                      break;
+                    case ConnectionState.none:
+                      print("Error");
+                      break;
+                    case ConnectionState.done:
+                      return Column(
+                        children: <Widget>[
+                          new RichText(
+                            textAlign: TextAlign.center,
+                            text: new TextSpan(
+                              text: "${check(snapshot.data)}",
+                              style: TextStyle(
+                                  color: setColor(snapshot.data),
+                                  fontSize:
+                                      MediaQuery.textScaleFactorOf(context) *
+                                          50,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          new Divider(),
+                          new Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: _loadCalendar(snapshot.data),
+                          ),
+                        ],
+                      );
+                      break;
+                  }
+                },
               ),
             ),
-          ],
-        ),
+            onRefresh: _handleRefresh),
       ),
     );
+  }
+
+  Widget _loadCalendar(Events data) {
+    print('size: ${data.items.length}');
+    // return new Text('size: ${data.items.length}');
+    return data.items.length == 0
+        ? new Text(
+            'Open Harbor Hours\nSo please come in.',
+            style: new TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor * 2,
+          )
+        : new ListView.builder(
+          itemCount: data.items.length,
+          itemBuilder: (context, int index){
+            return new GestureDetector(
+              onTap: (){
+              showModalBottomSheet(context: context, builder: (context) => new DetailScreen(data.items[index]));
+              },
+              child: new Column(
+                children: <Widget>[
+                  new ListTile(
+                    title: new Text(data.items[index].summary),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+    // new Text(
+    //                           'Current daily schedule for the harbor.',
+    //                           style: new TextStyle(
+    //                             fontWeight: FontWeight.bold,
+    //                             color: const Color.fromRGBO(0, 0, 0, 100.0),
+    //                           ),
+    //                           textAlign: TextAlign.center,
+    //                         ),
   }
 
   Future<Null> _handleRefresh() async {

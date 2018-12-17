@@ -8,7 +8,7 @@ import '../Scrape.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 List list = new List();
-Scrape scrape = new Scrape();
+Scrape scrape;
 
 class GenericTable extends StatefulWidget {
   // Scrape dataContext = new Scrape();
@@ -21,11 +21,11 @@ class GenericTable extends StatefulWidget {
     print('data context:${dataContext.toString()}');
     scrape = dataContext;
   }
-  static _GenericTableState of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(HomeInhertied)
-            as HomeInhertied)
-        .myGenErState;
-  }
+  // static _GenericTableState of(BuildContext context) {
+  //   return (context.inheritFromWidgetOfExactType(HomeInhertied)
+  //           as HomeInhertied)
+  //       .myGenErState;
+  // }
 
   @override
   _GenericTableState createState() => new _GenericTableState();
@@ -202,6 +202,10 @@ class _GenericTableState extends State<GenericTable> {
     return new ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, int index) {
+        String href;
+        data[index].children.forEach((f){
+          href = scrape.splitter(f);
+        });
         switch (data[index].toString()) {
           case "<html h2>":
             return new Container(
@@ -210,7 +214,7 @@ class _GenericTableState extends State<GenericTable> {
               child: new RichText(
                 textAlign: TextAlign.start,
                 text: new TextSpan(
-                  text: ' ${data[index].text}',
+                  text: '${data[index].text}',
                   style: new TextStyle(
                       color: Colors.black,
                       fontSize: 15.0,
@@ -221,20 +225,13 @@ class _GenericTableState extends State<GenericTable> {
             break;
           case "<html p>":
             print("hit p");
-            String href;
-            data[index].children.forEach((f) {
-              // setState(() {
-              //   href = scrape.splitter(f);
-              // });
-              href = scrape.splitter(f);
-            });
             return new Container(
               height: 100.0,
               padding: const EdgeInsets.all(20.0),
               child: new RichText(
                 textAlign: TextAlign.start,
                 text: new TextSpan(
-                  text: ' ${data[index].text}',
+                  text: '${data[index].text}',
                   style: (href != null)
                       ? new TextStyle(
                           color: Colors.blue,
@@ -254,6 +251,34 @@ class _GenericTableState extends State<GenericTable> {
               ),
             );
             break;
+          case "<html center>":
+            print("center: ${data[index].toString()}");
+            return new Text("${data[index].toString()} ${data[index].text}");
+            // return new Container(
+            //   padding: const EdgeInsets.all(20.0),
+            //   child: new RichText(
+            //     textAlign: TextAlign.start,
+            //     text: new TextSpan(
+            //       text: '${data[index].toString()}: ${data[index].text}',
+            //       style: (href != null)
+            //           ? new TextStyle(
+            //               color: Colors.blue,
+            //               fontSize: 15.0,
+            //               fontWeight: FontWeight.normal)
+            //           : new TextStyle(
+            //               color: Colors.black,
+            //               fontSize: 15.0,
+            //               fontWeight: FontWeight.normal),
+            //       recognizer: new TapGestureRecognizer()
+            //         ..onTap = () {
+            //           (href.isNotEmpty && href != null)
+            //               ? _checkLaunch(href)
+            //               : print("none");
+            //         },
+            //     ),
+            //   ),
+            // );
+            break;
           case "<html tbody>":
             print("hit case");
             List<TableFormatter> tableFormat = new List<TableFormatter>();
@@ -269,107 +294,6 @@ class _GenericTableState extends State<GenericTable> {
               ));
             });
             return new ListView.builder(
-              shrinkWrap: true,
-              itemCount: tableFormat.length,
-              itemBuilder: (context, int index) {
-                return new GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context) =>
-                            new ClassDetail(tableFormat[index]));
-                  },
-                  child: new Container(
-                    height: 100.0,
-                    width: 100.0,
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        new Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            new Flexible(
-                              child: new RichText(
-                                textAlign: TextAlign.justify,
-                                text: new TextSpan(
-                                  text: '${tableFormat[index].courseHead}',
-                                  style: new TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: true,
-                                maxLines: 3,
-                              ),
-                            ),
-                            new Flexible(
-                              child: new RichText(
-                                textAlign: TextAlign.justify,
-                                text: new TextSpan(
-                                  text: '${tableFormat[index].lecName}',
-                                  style: new TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: true,
-                                maxLines: 3,
-                              ),
-                            ),
-                          ],
-                        ),
-                        new Divider(),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-            break;
-          case "<html thead>":
-            // return new Container(
-            //   padding: const EdgeInsets.all(20.0),
-            //   child: new RichText(
-            //       textAlign: TextAlign.start,
-            //       text: new TextSpan(
-            //         text: ' ${data[index].outerHtml} thread container',
-            //         style: (href != null)
-            //             ? new TextStyle(
-            //                 color: Colors.blue,
-            //                 fontSize: 15.0,
-            //                 fontWeight: FontWeight.bold)
-            //             : new TextStyle(
-            //                 color: Colors.black,
-            //                 fontSize: 15.0,
-            //                 fontWeight: FontWeight.normal),
-            //         recognizer: new TapGestureRecognizer()
-            //           ..onTap = () {
-            //             (href.isNotEmpty && href != null)
-            //                 ? _checkLaunch(href)
-            //                 : print("none");
-            //           },
-            //       ),
-            //     ),
-            // );
-            return new Divider();
-            break;
-          case "<html table>":
-            // return new Text('${data[index].children}');
-            for (var table in data[index].getElementsByTagName("tbody")) {
-              List<TableFormatter> tableFormat = new List<TableFormatter>();
-              table.getElementsByTagName('tr').forEach((f) {
-                tableFormat.add(new TableFormatter(
-                  courseTitle: f.getElementsByTagName('td')[0].text,
-                  lecturer: f.getElementsByTagName('td')[1].text,
-                  courseSection: f.getElementsByTagName('td')[2].text,
-                  catalogNum: f.getElementsByTagName('td')[3].text,
-                  daySched: f.getElementsByTagName('td')[4].text,
-                  dateTime: f.getElementsByTagName('td')[5].text,
-                  roomCall: f.getElementsByTagName('td')[6].text,
-                ));
-              });
-              return new ListView.builder(
                 shrinkWrap: true,
                 itemCount: tableFormat.length,
                 itemBuilder: (context, int index) {
@@ -383,9 +307,17 @@ class _GenericTableState extends State<GenericTable> {
                     child: new Container(
                       height: 100.0,
                       width: 100.0,
+                      decoration: new BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Color.fromARGB(100, 0, 0, 0),
+                          width: 1.5,
+                        ),
+                        borderRadius: new BorderRadius.circular(10.0),
+                      ),
                       child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           new Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -418,6 +350,111 @@ class _GenericTableState extends State<GenericTable> {
                                   maxLines: 3,
                                 ),
                               ),
+                              new Container(
+                                width: 15.0,
+                                height: 15.0,
+                              ),
+                              new Row(
+                                children: <Widget>[
+                                  new Icon(Icons.info_outline, color: Colors.black,),
+                                  new Text('Tap for more information'),
+                                ],
+                              ),
+                            ],
+                          ),
+                          new Divider(),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            break;
+          case "<html thead>":
+            return new Divider();
+            break;
+          case "<html table>":
+            // return new Text('${data[index].children}');
+            for (var table in data[index].getElementsByTagName("tbody")) {
+              List<TableFormatter> tableFormat = new List<TableFormatter>();
+              table.getElementsByTagName('tr').forEach((f) {
+                tableFormat.add(new TableFormatter(
+                  courseTitle: f.getElementsByTagName('td')[0].text,
+                  lecturer: f.getElementsByTagName('td')[1].text,
+                  courseSection: f.getElementsByTagName('td')[2].text,
+                  catalogNum: f.getElementsByTagName('td')[3].text,
+                  daySched: f.getElementsByTagName('td')[4].text,
+                  dateTime: f.getElementsByTagName('td')[5].text,
+                  roomCall: f.getElementsByTagName('td')[6].text,
+                ));
+              });
+              return new ListView.builder(
+                shrinkWrap: true,
+                itemCount: tableFormat.length,
+                itemBuilder: (context, int index) {
+                  return new GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) =>
+                              new ClassDetail(tableFormat[index]));
+                    },
+                    child: new Container(
+                      height: 100.0,
+                      width: 100.0,
+                      decoration: new BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Color.fromARGB(100, 0, 0, 0),
+                          width: 1.5,
+                        ),
+                        borderRadius: new BorderRadius.circular(10.0),
+                      ),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          new Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              new Flexible(
+                                child: new RichText(
+                                  textAlign: TextAlign.justify,
+                                  text: new TextSpan(
+                                    text: '${tableFormat[index].courseHead}',
+                                    style: new TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  maxLines: 3,
+                                ),
+                              ),
+                              new Flexible(
+                                child: new RichText(
+                                  textAlign: TextAlign.justify,
+                                  text: new TextSpan(
+                                    text: '${tableFormat[index].lecName}',
+                                    style: new TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  maxLines: 3,
+                                ),
+                              ),
+                              new Container(
+                                width: 15.0,
+                                height: 15.0,
+                              ),
+                              new Row(
+                                children: <Widget>[
+                                  new Icon(Icons.info_outline, color: Colors.black,),
+                                  new Text('Tap for more information'),
+                                ],
+                              ),
                             ],
                           ),
                           new Divider(),
@@ -430,28 +467,15 @@ class _GenericTableState extends State<GenericTable> {
             }
             break;
           case "<html br>":
-            return new Container(
-              height: 1,
-              child: SizedBox(
-                height: 1.0,
-                width: 1.0,
-              ),
-            );
+            return new Divider(height: 0.0, color: Colors.white,);
             break;
           default:
-            String href;
-            data[index].children.forEach((f) {
-              // setState(() {
-              //   href = scrape.splitter(f);
-              // });
-              href = scrape.splitter(f);
-            });
             return new Container(
               padding: const EdgeInsets.all(20.0),
               child: new RichText(
                 textAlign: TextAlign.start,
                 text: new TextSpan(
-                  text: ' ${data[index].text}',
+                  text: '${data[index].text}',
                   style: (href != null)
                       ? new TextStyle(
                           color: Colors.blue,
@@ -498,18 +522,18 @@ class _GenericTableState extends State<GenericTable> {
   }
 }
 
-class HomeInhertied extends InheritedWidget {
-  final _GenericTableState myGenErState;
+// class HomeInhertied extends InheritedWidget {
+//   final _GenericTableState myGenErState;
 
-  HomeInhertied({
-    Key key,
-    @required this.myGenErState,
-    @required Widget child,
-  }) : super(key: key, child: child);
+//   HomeInhertied({
+//     Key key,
+//     @required this.myGenErState,
+//     @required Widget child,
+//   }) : super(key: key, child: child);
 
-  @override
-  bool updateShouldNotify(HomeInhertied oldWidget) => true;
-}
+//   @override
+//   bool updateShouldNotify(HomeInhertied oldWidget) => true;
+// }
 
 class ClassDetail extends StatefulWidget {
   TableFormatter data;

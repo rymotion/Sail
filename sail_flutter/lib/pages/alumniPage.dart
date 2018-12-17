@@ -9,17 +9,21 @@ import 'package:url_launcher/url_launcher.dart';
 
 List list = new List();
 Scrape scrape;
+Scrape scrapeSecondPass;
 
-class GenericPage extends StatefulWidget {
+String secondPassURL = "https://www.csusb.edu/sail/sail-alumni/join-sail’s-alumni-list";
+
+class AlumniPage extends StatefulWidget {
   // Scrape dataContext = new Scrape();
 
 //  Widget child;
 
-  GenericPage() {}
-  GenericPage.setScraper(Scrape dataContext) {
+  AlumniPage() {}
+  AlumniPage.setScraper(Scrape dataContext) {
     scrape = new Scrape();
     print('data context:${dataContext.toString()}');
     scrape = dataContext;
+    scrapeSecondPass = new Scrape.setLoad(secondPassURL);
   }
   // static _GenericPageState of(BuildContext context) {
   //   return (context.inheritFromWidgetOfExactType(HomeInhertied)
@@ -28,23 +32,24 @@ class GenericPage extends StatefulWidget {
   // }
 
   @override
-  _GenericPageState createState() => new _GenericPageState();
+  _AlumniPageState createState() => new _AlumniPageState();
 }
 
-class _GenericPageState extends State<GenericPage> {
+class _AlumniPageState extends State<AlumniPage> {
   var header = " ";
   List body = [];
   List<doc.Element> table;
 
   _grabObjects() async {
+    // scrapeSecondPass = new Scrape.setLoad(secondPassURL);
     try {
       // TODO: add warning connect to network
-      if (!await scrape.canAccess) {
-        var returnHeader = await scrape.getHeader;
+      if (!await scrape.canAccess && !await scrapeSecondPass.canAccess) {
+        var returnHeader = await scrapeSecondPass.getHeader;
         setState(() {
           header = returnHeader;
         });
-        var returnBody = await scrape.getBody;
+        var returnBody = await scrapeSecondPass.getBody;
         setState(() {
           body = returnBody;
         });
@@ -136,7 +141,7 @@ class _GenericPageState extends State<GenericPage> {
     print('Hit build table');
     _grabObjects();
     return new FutureBuilder(
-      future: scrape.getPage,
+      future: scrapeSecondPass.getPage,
       builder:
           (BuildContext context, AsyncSnapshot<List<doc.Element>> snapshot) {
         switch (snapshot.connectionState) {
@@ -695,16 +700,3 @@ class _GenericPageState extends State<GenericPage> {
     // launch(urlScheme);
   }
 }
-
-// class HomeInhertied extends InheritedWidget {
-//   final _GenericPageState myGenErState;
-
-//   HomeInhertied({
-//     Key key,
-//     @required this.myGenErState,
-//     @required Widget child,
-//   }) : super(key: key, child: child);
-
-//   @override
-//   bool updateShouldNotify(HomeInhertied oldWidget) => true;
-// }

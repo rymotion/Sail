@@ -26,8 +26,8 @@ var _scopes = [CalendarApi.CalendarReadonlyScope];
 class CalDevParse {
   Events currLine;
   CalDevParse();
-  Future<bool> get initEventCal => _initEvent();
-  Future<bool> get initRoomCal => _initRoom();
+  // Future<bool> get initEventCal => _initEvent();
+  // Future<bool> get initRoomCal => _initRoom();
   Future<Events> get eventList => _getEvents();
   Future<Events> get pastEvent => _getPastEvents();
   Future<Events> get roomAvailable => _getOpen();
@@ -67,15 +67,11 @@ class CalDevParse {
       var calendar = new CalendarApi(client);
       var now = new DateTime.now();
       try {
-        await calendar.events
+        var result = await calendar.events
             .list('aglqj6c518aatdsn5244ubgnr4@group.calendar.google.com',
-                singleEvents: false, timeMax: now.toUtc())
-            .then((Events result) {
-          // returnOnHit = result != null ? new Event() : result;
-          returnOnHit = result;
-          print('returned data: ${returnOnHit.toJson()}');
-          return returnOnHit;
-        });
+                singleEvents: false, timeMax: now.toUtc());
+        returnOnHit = result;
+        return returnOnHit;
       } catch (e) {
         print(e.toString());
       }
@@ -95,15 +91,11 @@ class CalDevParse {
       var calendar = new CalendarApi(client);
       var now = new DateTime.now();
       try {
-        await calendar.events
+        var result = await calendar.events
             .list('moe6r4aen5mu8aelggtli24q3k@group.calendar.google.com',
-                singleEvents: false, timeMin: now.toUtc(), timeMax: now.toUtc(),)
-            .then((Events result) {
-          // returnOnHit = result != null ? new Event() : result;
-          print(result);
-          returnOnHit = result;
-          return returnOnHit;
-        });
+                singleEvents: false, timeMin: now.toUtc(), timeMax: now.toUtc(),);
+        returnOnHit = result;
+        return returnOnHit;
       } catch (e) {
         print(e.toString());
       }
@@ -113,11 +105,12 @@ class CalDevParse {
     return returnOnHit;
   }
 
-  Future<bool> _initEvent() {
-    
-  }
+  // Future<bool> _initEvent() {
+  //   bool data = true;
+  //   ;
+  // }
 
-  Future<bool> _initRoom() {
-    
-  }
+  // Future<bool> _initRoom() {
+  //   return true;
+  // }
 }

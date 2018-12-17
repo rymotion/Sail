@@ -42,6 +42,29 @@ class PageFormatter {
   List<TableFormatter> get grabTable => table;
 }
 
+class ContactData {
+  String profileURL;
+  String profileName;
+  String emailURL;
+  String title;
+  String eName;
+
+  ContactData({
+    this.profileName,
+    this.emailURL,
+    this.profileURL,
+    this.title,
+    this.eName
+//    this.subtitle
+  });
+
+  String get name => profileName;
+  String get headshotURL => profileURL;
+  String get email => emailURL;
+  String get emailLabel => eName;
+  String get officeTitle => title;
+}
+
 class TableFormatter {
   String courseTitle;
   String lecturer;
@@ -94,11 +117,12 @@ class Scrape {
   // Future<List<List<TableFormatter>>> get getTable => _tableParse();
   Future<List<ElementFormatter>> get getNavigation => _navMenuGeneration();
   Future<List<String>> get getLinks => _parseLinks();
-  Future<List<Datagram>> get getImages => _parseImages();
+  Future<String> get getImages => _parseImages();
   Future<List<Element>> get getContactMain => _getContact();
   Future<List> get _internalHeader => _parseBodyHeader();
   Future<List> get sideMenu => _getSideBar();
   Future<List<Element>> get getPage => _pageElements();
+  Future<List<Element>> get grabContact => _contactList();
   // String get href() => _splitter(toSplit);
 //  MARK: Makes sure that site is accessible.
   Future<bool> _access() async {
@@ -290,7 +314,7 @@ class Scrape {
       toSplit.getElementsByTagName('a').forEach((f) {
         print('not empty');
         var temp = f.outerHtml;
-        print(temp);
+        print("starting String: $temp");
         if (temp.contains("href")) {
           for (var i = 0; i < temp.length; i++) {
             // Find first instance of "
@@ -307,7 +331,32 @@ class Scrape {
           try {
             extract = temp.substring(startIndex, matchIndex);
           } catch (e){
-            print("Error thrown here");
+            print("Error thrown here: ${e.toString()}");
+          }
+        }
+      });
+    } else if (toSplit.getElementsByClassName('img').isNotEmpty) {
+      toSplit.getElementsByTagName('img').forEach((f){
+        print('not empty');
+        var temp = f.outerHtml;
+        print("starting String: $temp");
+        if (temp.contains("src")) {
+          for (var i = 0; i < temp.length; i++) {
+            // Find first instance of "
+            if ('"' == temp[i] && startIndex == 0) {
+//          print('Found beginning instance of " in ${i.toString()}\n');
+              i++;
+              startIndex = i;
+            } else if ('"' == temp[i] && matchIndex == 0) {
+//          print('Found ending instance of " in ${i.toString()}\n');
+              matchIndex = i;
+            }
+          }
+          // print('in supstring: ${temp.substring(startIndex, matchIndex)}');
+          try {
+            extract = temp.substring(startIndex, matchIndex);
+          } catch (e){
+            print("Error thrown here: ${e.toString()}");
           }
         }
       });
@@ -342,7 +391,7 @@ class Scrape {
     return navMenu;
   }
 
-Future<List> _getSideBar() async{
+Future <List> _getSideBar() async{
   document = await _getWebResponse();
   try{
     print('sidebar navigation menu');
@@ -357,9 +406,11 @@ Future<List> _getSideBar() async{
 }
 
 // MARK: Gets and picture metadata
-  Future<List<Datagram>> _parseImages() async {
+
+  Future <String> _parseImages() async {
     document = await _getWebResponse();
-    List<Datagram> images;
+    String images;
+
     return images;
   }
 
@@ -382,6 +433,68 @@ Future<List> _getSideBar() async{
     } catch (e){
       print('${e.toString()}');
     }
+  }
+
+  Future<List<Element>> _contactList() async {
+    document = await _getWebResponse();
+    List<Element> listedContact = new List<Element>();
+    List<ContactData> contactData = new List<ContactData>();
+    ContactData person = new ContactData();
+    try{
+      for (var elements in document.getElementsByClassName("region region-content")) {
+        for (var items in elements.getElementsByClassName("field-items")){
+          for (var node in items.getElementsByClassName("field field-name-field-pa-center-content field-type-text-long field-label-hidden")) {
+
+            print("item from internal nodes: ${node.toString()}\n${node.innerHtml}");
+            
+            listedContact.add(node);
+
+            break;
+          }
+        }
+      }
+      // traverses from start of page again
+      for (var elements in document.getElementsByClassName("region region-content")) {
+        // print(elements.attributes["field-items"].toString());
+        for (var items in elements.getElementsByClassName("ds-3col-equal entity entity-paragraphs-item paragraphs-item-three-columns view-mode-full clearfix")){
+          for (var nodes in items.getElementsByClassName("field-items")) {
+
+            print("item from left nodes: ${nodes.toString()}\n${nodes.innerHtml}");
+            // _findContent(leftNode.children);
+            listedContact.addAll(_findContent(nodes.children));
+
+          }
+        }
+      }
+    } catch (e){
+      print('${e.toString()}');
+    }
+
+    return listedContact;
+  }
+
+  // recursive function to find nested content within <html div>
+  List<Element> _findContent(List<Element> nestContent){
+    List<Element> foundElement = new List<Element>();
+    for(var content in nestContent){
+      print("children: ${nestContent.toString()}");
+      if (content.hasChildNodes()) {
+        return _findContent(content.children);
+      } else {
+        // print("node Content:" + content?.text ?? "no Content");
+        // if (content?.text == null) {
+        //   nestContent.remove(content);
+        // } else {
+        //   foundElement.add(content);
+        // }
+        foundElement.addAll(nestContent);
+//        foundElement.add(content);
+        print("hits return. current running size: ${foundElement.length}");
+        return foundElement;
+      }
+    }
+    print("broke out of loop");
+    return foundElement;
   }
 }
 

@@ -1,0 +1,693 @@
+Launching lib/main.dart on iPhone XR in debug mode...
+Starting Xcode build...                                         
+Xcode build done.                                            8.1s
+Syncing files to device iPhone XR...                            
+flutter: from Scrape:
+ http://www.csusb.edu/sail
+flutter: Table connection is waiting.
+flutter: 3
+flutter: The Student Assistance in Learning (SAIL) program is a TRiO Student Support Services grant, which has served nearly 5,000 students at Cal State San Bernardino since 1981. Funded by the U.S. Department of Education, the federal TRiO programs began with passage of the Educational Opportunity Act of 1964. They include outreach programs designed to assist low-income, first-generation and students with disabilities as they proceed through the academic pipeline from middle school to post-baccalaureate programs. The specific goal of Student Support Services programs like SAIL is to increase the college retention and graduation rates of targeted students at the undergraduate level through academic support and advising services.
+flutter: Winter 2019 Application Process&nbsp;
+flutter: SAIL’s open enrollment period&nbsp;is currently closed for the fall 2018 quarter. Any student interested joining the SAIL Program in the winter 2019 quarter, must complete the following form:<strong>&nbsp;<a href="https://docs.google.com/forms/d/e/1FAIpQLSfkblrwQ5ZdlldxbGgoRcE6S91kkZbbvHav6jKL8TX2hiSISQ/viewform">SAIL’s W</a><a href="https://goo.gl/koVVdv" target="_blank">inter 2019 Waitlist</a>.</strong>&nbsp; On&nbsp;a first-come-first-serve basis, qualified students on the waitlist will be contacted in mid-November via email with directions on how to continue the application to the program.&nbsp;&nbsp;
+flutter:
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkblrwQ5ZdlldxbGgoRcE6S91kkZbbvHav6jKL8TX2hiSISQ/viewform">SAIL’s W</a>
+flutter: not empty
+flutter: starting String: <a href="https://goo.gl/koVVdv" target="_blank">inter 2019 Waitlist</a>
+flutter: Error thrown here: RangeError: Value not in range: 108
+flutter: https://docs.google.com/forms/d/e/1FAIpQLSfkblrwQ5ZdlldxbGgoRcE6S91kkZbbvHav6jKL8TX2hiSISQ/viewform
+flutter: ══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
+flutter: The following NoSuchMethodError was thrown during a scheduler callback:
+flutter: The getter 'left' was called on null.
+flutter: Receiver: null
+flutter: Tried calling: left
+flutter:
+flutter: When the exception was thrown, this was the stack:
+flutter: #0      Object.noSuchMethod (dart:core/runtime/libobject_patch.dart:50:5)
+flutter: #1      RenderParagraph.assembleSemanticsNode.buildSemanticsConfig (package:flutter/src/rendering/paragraph.dart:495:14)
+flutter: #2      RenderParagraph.assembleSemanticsNode (package:flutter/src/rendering/paragraph.dart:518:72)
+flutter: #3      _SwitchableSemanticsFragment.compileChildren (package:flutter/src/rendering/object.dart:3354:13)
+flutter: #4      _SyncIterator.moveNext (dart:core/runtime/libcore_patch.dart:151:12)
+flutter: #5      List.addAll (dart:core/runtime/libgrowable_array.dart:192:13)
+flutter: #6      _SwitchableSemanticsFragment.compileChildren (package:flutter/src/rendering/object.dart:3351:16)
+flutter: #7      _SyncIterator.moveNext (dart:core/runtime/libcore_patch.dart:151:12)
+flutter: #8      List.addAll (dart:core/runtime/libgrowable_array.dart:192:13)
+flutter: #9      _SwitchableSemanticsFragment.compileChildren (package:flutter/src/rendering/object.dart:3351:16)
+flutter: #10     _SyncIterator.moveNext (dart:core/runtime/libcore_patch.dart:151:12)
+flutter: #11     List.addAll (dart:core/runtime/libgrowable_array.dart:192:13)
+flutter: #12     _SwitchableSemanticsFragment.compileChildren (package:flutter/src/rendering/object.dart:3351:16)
+flutter: #13     _SyncIterator.moveNext (dart:core/runtime/libcore_patch.dart:151:12)
+flutter: #14     List.addAll (dart:core/runtime/libgrowable_array.dart:192:13)
+flutter: #15     _SwitchableSemanticsFragment.compileChildren (package:flutter/src/rendering/object.dart:3351:16)
+flutter: #16     _SyncIterator.moveNext (dart:core/runtime/libcore_patch.dart:151:12)
+flutter: #17     List.addAll (dart:core/runtime/libgrowable_array.dart:192:13)
+flutter: #18     _RootSemanticsFragment.compileChildren (package:flutter/src/rendering/object.dart:3245:16)
+flutter: #19     _SyncIterator.moveNext (dart:core/runtime/libcore_patch.dart:151:12)
+flutter: #20     Iterable.single (dart:core/iterable.dart:552:13)
+flutter: #21     RenderObject._updateSemantics (package:flutter/src/rendering/object.dart:2398:7)
+flutter: #22     PipelineOwner.flushSemantics (package:flutter/src/rendering/object.dart:951:16)
+flutter: #23     _WidgetsFlutterBinding&BindingBase&GestureBinding&ServicesBinding&SchedulerBinding&PaintingBinding&SemanticsBinding&RendererBinding.drawFrame (package:flutter/src/rendering/binding.dart:285:19)
+flutter: #24     _WidgetsFlutterBinding&BindingBase&GestureBinding&ServicesBinding&SchedulerBinding&PaintingBinding&SemanticsBinding&RendererBinding&WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:677:13)
+flutter: #25     _WidgetsFlutterBinding&BindingBase&GestureBinding&ServicesBinding&SchedulerBinding&PaintingBinding&SemanticsBinding&RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:219:5)
+flutter: #26     _WidgetsFlutterBinding&BindingBase&GestureBinding&ServicesBinding&SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:990:15)
+flutter: #27     _WidgetsFlutterBinding&BindingBase&GestureBinding&ServicesBinding&SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:930:9)
+flutter: #28     _WidgetsFlutterBinding&BindingBase&GestureBinding&ServicesBinding&SchedulerBinding._handleDrawFrame (package:flutter/src/scheduler/binding.dart:842:5)
+flutter: #29     _invoke (dart:ui/hooks.dart:154:13)
+flutter: #30     _drawFrame (dart:ui/hooks.dart:143:3)
+flutter: ════════════════════════════════════════════════════════════════════════════════════════════════════
+flutter: there is data.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'left' was called on null.
+ 2.3s
+
+🔥  To hot reload changes while running, press "r". To hot restart (and rebuild state), press "R".
+An Observatory debugger and profiler on iPhone XR is available at: http://127.0.0.1:60391/
+For a more detailed help message, press "h". To detach, press "d"; to quit, press "q".
+flutter: from Scrape:
+ http://www.csusb.edu/sail
+flutter: the connection is:
+true
+flutter: 
+complete
+flutter: Location:University Hall (UH), Room 386
+flutter: Phone:(909) 537-5921
+flutter: Fax:(909) 537-7586
+flutter: Email:sail@csusb.edu
+flutter: Regular Office Hours:Monday-Thursday8:00am-5:00pm
+flutter: Friday8:00am-4:30pm
+flutter: Node: []
+flutter: Node: [<html li>, <html li>, <html li>, <html li>]
+flutter: <a href="/sail" class="active-trail active">Home</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail" class="active-trail active">Home</a>
+flutter: /sail
+flutter: <a href="/sail/students">Students</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/students">Students</a>
+flutter: /sail/students
+flutter: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: /sail/sail-courses
+flutter: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: /sail/sail-alumni
+flutter: item builder:[<html strong>, <html br>]
+flutter: Splitter:
+flutter: null
+flutter: Splitter:
+flutter: null
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'isNotEmpty' was called on null.
+flutter: head
+flutter: Node: []
+flutter: Node: [<html li>, <html li>, <html li>, <html li>]
+flutter: <a href="/sail" class="active-trail active">Home</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail" class="active-trail active">Home</a>
+flutter: /sail
+flutter: <a href="/sail/students">Students</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/students">Students</a>
+flutter: /sail/students
+flutter: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: /sail/sail-courses
+flutter: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: /sail/sail-alumni
+flutter: Location:University Hall (UH), Room 386
+flutter: Phone:(909) 537-5921
+flutter: Fax:(909) 537-7586
+flutter: Email:sail@csusb.edu
+flutter: Regular Office Hours:Monday-Thursday8:00am-5:00pm
+flutter: Friday8:00am-4:30pm
+flutter: item builder:[<html strong>, <html br>]
+flutter: Splitter:
+flutter: null
+flutter: Splitter:
+flutter: null
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'isNotEmpty' was called on null.
+flutter: Node: []
+flutter: Node: [<html li>, <html li>, <html li>, <html li>]
+flutter: <a href="/sail" class="active-trail active">Home</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail" class="active-trail active">Home</a>
+flutter: /sail
+flutter: <a href="/sail/students">Students</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/students">Students</a>
+flutter: /sail/students
+flutter: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: /sail/sail-courses
+flutter: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: /sail/sail-alumni
+flutter: list: /sail
+flutter: list: /sail/students
+flutter: list: /sail/sail-courses
+flutter: list: /sail/sail-alumni
+flutter: list: /calendar
+flutter: list: /harbor_calendar
+flutter: list: https://csusb.mywconline.net/
+flutter: list: /contact
+flutter: list: /check-in
+flutter: 
+/contact
+flutter: hit end and will return
+flutter: from Scrape:
+ http://www.csusb.edu/sail/meet-sail-staff
+flutter: Table connection is waiting.
+flutter: Table connection is waiting.
+flutter: Node: []
+flutter: Node: [<html li>, <html li>, <html li>, <html li>]
+flutter: <a href="/sail" class="active-trail active">Home</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail" class="active-trail active">Home</a>
+flutter: /sail
+flutter: <a href="/sail/students">Students</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/students">Students</a>
+flutter: /sail/students
+flutter: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: /sail/sail-courses
+flutter: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: /sail/sail-alumni
+flutter: Location:University Hall (UH), Room 386
+flutter: Phone:(909) 537-5921
+flutter: Fax:(909) 537-7586
+flutter: Email:sail@csusb.edu
+flutter: Regular Office Hours:Monday-Thursday8:00am-5:00pm
+flutter: Friday8:00am-4:30pm
+flutter: NoSuchMethodError: The getter 'iterator' was called on null.
+Receiver: null
+Tried calling: iterator
+flutter: NoSuchMethodError: The getter 'iterator' was called on null.
+Receiver: null
+Tried calling: iterator
+flutter: item from internal nodes: <html div>
+<div class="field-items"><div class="field-item even"><p style="text-align: center;">The SAIL staff is uniquely qualified to provide quality services for participants.&nbsp; Come visit us.&nbsp; We look forward to meeting and working with you.<br><br><strong><em>A smile, some advice, encouragement, an ear.&nbsp; What do you need today? &nbsp;</em></strong></p>
+</div></div>
+flutter: item from left nodes: <html div>
+<div class="field-item even"><p style="text-align: center;"></p><div class="media media-element-container media-default"><div id="file-92761" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img height="148" width="225" class="media-element file-default img-responsive" data-delta="1" src="https://www.csusb.edu/sites/csusb/files/Kristen%20Stutz_SAIL%20Staff%20Photo_Webpage%20Size.jpg" alt="">  </div>
+
+
+</div>
+</div><p></p>
+<p style="text-align: center;"><strong>Kristen Stutz</strong><br>Director<br><a href="mailto:Kstutz@csusb.edu">Kstutz@csusb.edu</a></p>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html p>, <html div>, <html p>, <html p>]
+flutter: hits return. current running size: 4
+flutter: item from left nodes: <html div>
+<div class="field-item even"><p style="text-align: center;"></p><div class="media media-element-container media-default"><div id="file-199821" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img alt="Carina Torres Interim Program Coordinator" style="height: 150px; width: 225px;" class="media-element file-default img-responsive" data-delta="9" src="https://www.csusb.edu/sites/csusb/files/Torres_Carina%20.JPG" width="4718" height="3146">  </div>
+
+
+</div>
+</div><p></p>
+<p style="text-align: center;"><b>Carina Torres</b><br>Interim Program Coordinator<br><a href="mailto:Carina.Torres@csusb.edu">Carina.Torres@csusb.edu</a></p>
+<p style="text-align: center;"><br>&nbsp;</p>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html p>, <html div>, <html p>, <html p>, <html p>]
+flutter: hits return. current running size: 5
+flutter: item from left nodes: <html div>
+<div class="field-item even"><p style="text-align: center;"></p><div class="media media-element-container media-default"><div id="file-94091" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img alt="Monica Pulido Staff Photo" height="150" width="225" class="media-element file-default img-responsive" data-delta="3" src="https://www.csusb.edu/sites/csusb/files/Monica%20Pulido_SAIL%20Staff%20Photo_Webpage%20Size_0.jpg">  </div>
+
+
+</div>
+</div><p></p>
+<p style="text-align: center;"><strong>Monica Pulido</strong><br>&nbsp;Administrative Support Assistant<br><a href="mailto:Monica.Pulido@csusb.edu">Monica.Pulido@csusb.edu</a></p>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html p>, <html div>, <html p>, <html p>]
+flutter: hits return. current running size: 4
+flutter: item from left nodes: <html div>
+<div class="field-item even"><p style="text-align: center;"></p><div class="media media-element-container media-default"><div id="file-185336" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img class="media-element file-default img-responsive" data-delta="7" src="https://www.csusb.edu/sites/csusb/files/Brenda%2520Luis_SAIL%2520Staff%2520Photo_Webpage%2520Size.jpg" width="225" height="149" alt="">  </div>
+
+
+</div>
+</div><p></p>
+<p style="text-align: center;"><strong>Brenda Yasmin Luis</strong><br>Supervising Counselor<br><a href="mailto:Brenda.Luis@csusb.edu">Brenda.Luis@csusb.edu</a></p>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html p>, <html div>, <html p>, <html p>]
+flutter: hits return. current running size: 4
+flutter: item from left nodes: <html div>
+<div class="field-item even"><p style="text-align: center;"></p><div class="media media-element-container media-default"><div id="file-199841" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img alt="Victoria Argot Interim SAIL Counselor" style="height: 150px; width: 225px;" class="media-element file-default img-responsive" data-delta="16" src="https://www.csusb.edu/sites/csusb/files/Argot_Victoria.JPG" width="4716" height="3143">  </div>
+
+
+</div>
+</div><p></p>
+<p style="text-align: center;"><strong>Victoria Argot</strong><br>&nbsp;Interim Counselor<br>Director of&nbsp;Social Media<br><a href="mailto:Victoria.Argot@csusb.edu">Victoria.Argot@csusb.edu</a></p>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html p>, <html div>, <html p>, <html p>]
+flutter: hits return. current running size: 4
+flutter: item from left nodes: <html div>
+<div class="field-item even"><p style="text-align: center;"></p><div class="media media-element-container media-default"><div id="file-199831" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img alt="Cynthia Ulloa Graduate Counseling Intern" style="height: 150px; width: 225px;" class="media-element file-default img-responsive" data-delta="12" src="https://www.csusb.edu/sites/csusb/files/Ulloa_Cynthia.JPG" width="4720" height="3146">  </div>
+
+
+</div>
+</div><p></p>
+<p style="text-align: center;"><strong>Cynthia Ulloa</strong><br>Graduate Counseling Intern&nbsp;<br><a href="mailto:Cynthia.Ulloa@csusb.edu">Cynthia.Ulloa@csusb.edu</a></p>
+<p style="text-align: center;"></p>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html p>, <html div>, <html p>, <html p>, <html p>]
+flutter: hits return. current running size: 5
+flutter: item from left nodes: <html div>
+<div class="field-item even"><div style="text-align: center;"><div class="media media-element-container media-default"><div id="file-199826" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img alt="Lydia Pearson Academic Intervention Specialist" style="height: 150px; width: 225px;" class="media-element file-default img-responsive" data-delta="11" src="https://www.csusb.edu/sites/csusb/files/Pearson_Lydia.JPG" width="4764" height="3175">  </div>
+
+
+</div>
+</div></div>
+<div style="text-align: center;"><br><strong>Lydia Pearson</strong><br>Academic Intervention Specialist<br><a href="mailto:lpearson@csusb.edu">lpearson@csusb.edu</a></div>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html div>, <html div>]
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html img>]
+flutter: hits return. current running size: 1
+flutter: item from left nodes: <html div>
+<div class="field-item even"><div style="text-align: center;"><div class="media media-element-container media-default"><div id="file-94686" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img alt="SAIL Program Logo" class="media-element file-default img-responsive" data-delta="15" src="https://www.csusb.edu/sites/csusb/files/SAIL%202011%20Logo%20%28color%29_Updated%202.jpg" width="400" height="243">  </div>
+
+
+</div>
+</div></div>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html img>]
+flutter: hits return. current running size: 1
+flutter: item from left nodes: <html div>
+<div class="field-item even"><div style="text-align: center;"><div class="media media-element-container media-default"><div id="file-199836" class="file file-image file-image-jpeg">
+
+
+
+
+  <div class="content">
+    <img alt="Junior Perez STEM Coach" style="height: 150px; width: 225px;" class="media-element file-default img-responsive" data-delta="14" src="https://www.csusb.edu/sites/csusb/files/Perez%20_Junior.JPG" width="4726" height="3150">  </div>
+
+
+</div>
+</div></div>
+<div style="text-align: center;"><br><strong>Junior Perez</strong><br>STEM Coach</div>
+</div>
+flutter: children: [<html div>]
+flutter: children: [<html div>, <html div>]
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html div>]
+flutter: children: [<html img>]
+flutter: hits return. current running size: 1
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Kstutz@csusb.edu">Kstutz@csusb.edu</a>
+flutter: mailto:Kstutz@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Carina.Torres@csusb.edu">Carina.Torres@csusb.edu</a>
+flutter: mailto:Carina.Torres@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: 3
+flutter: The Student Assistance in Learning (SAIL) program is a TRiO Student Support Services grant, which has served nearly 5,000 students at Cal State San Bernardino since 1981. Funded by the U.S. Department of Education, the federal TRiO programs began with passage of the Educational Opportunity Act of 1964. They include outreach programs designed to assist low-income, first-generation and students with disabilities as they proceed through the academic pipeline from middle school to post-baccalaureate programs. The specific goal of Student Support Services programs like SAIL is to increase the college retention and graduation rates of targeted students at the undergraduate level through academic support and advising services.
+flutter: Winter 2019 Application Process&nbsp;
+flutter: SAIL’s open enrollment period&nbsp;is currently closed for the fall 2018 quarter. Any student interested joining the SAIL Program in the winter 2019 quarter, must complete the following form:<strong>&nbsp;<a href="https://docs.google.com/forms/d/e/1FAIpQLSfkblrwQ5ZdlldxbGgoRcE6S91kkZbbvHav6jKL8TX2hiSISQ/viewform">SAIL’s W</a><a href="https://goo.gl/koVVdv" target="_blank">inter 2019 Waitlist</a>.</strong>&nbsp; On&nbsp;a first-come-first-serve basis, qualified students on the waitlist will be contacted in mid-November via email with directions on how to continue the application to the program.&nbsp;&nbsp;
+flutter:
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkblrwQ5ZdlldxbGgoRcE6S91kkZbbvHav6jKL8TX2hiSISQ/viewform">SAIL’s W</a>
+flutter: not empty
+flutter: starting String: <a href="https://goo.gl/koVVdv" target="_blank">inter 2019 Waitlist</a>
+flutter: Error thrown here: RangeError: Value not in range: 108
+flutter: https://docs.google.com/forms/d/e/1FAIpQLSfkblrwQ5ZdlldxbGgoRcE6S91kkZbbvHav6jKL8TX2hiSISQ/viewform
+flutter: Location:University Hall (UH), Room 386
+flutter: Phone:(909) 537-5921
+flutter: Fax:(909) 537-7586
+flutter: Email:sail@csusb.edu
+flutter: Regular Office Hours:Monday-Thursday8:00am-5:00pm
+flutter: Friday8:00am-4:30pm
+flutter: Node: []
+flutter: Node: [<html li>, <html li>, <html li>, <html li>]
+flutter: <a href="/sail" class="active-trail active">Home</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail" class="active-trail active">Home</a>
+flutter: /sail
+flutter: <a href="/sail/students">Students</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/students">Students</a>
+flutter: /sail/students
+flutter: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-courses">SAIL Courses</a>
+flutter: /sail/sail-courses
+flutter: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="/sail/sail-alumni">SAIL Alumni</a>
+flutter: /sail/sail-alumni
+flutter: there is data.
+flutter: list: /sail
+flutter: list: /sail/students
+flutter: list: /sail/sail-courses
+flutter: list: /sail/sail-alumni
+flutter: list: /calendar
+flutter: list: /harbor_calendar
+flutter: list: https://csusb.mywconline.net/
+flutter: list: /contact
+flutter: list: /check-in
+flutter: item builder:[<html strong>, <html br>]
+flutter: Splitter:
+flutter: null
+flutter: Splitter:
+flutter: null
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'isNotEmpty' was called on null.
+flutter: Location:University Hall (UH), Room 386
+flutter: Phone:(909) 537-5921
+flutter: Fax:(909) 537-7586
+flutter: Email:sail@csusb.edu
+flutter: Regular Office Hours:Monday-Thursday8:00am-5:00pm
+flutter: Friday8:00am-4:30pm
+flutter: Another exception was thrown: Incorrect use of ParentDataWidget.
+flutter: Another exception was thrown: 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart': Failed assertion: line 235 pos 16: 'indexOf(child) > index': is not true.
+flutter: Another exception was thrown: 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart': Failed assertion: line 235 pos 16: 'indexOf(child) > index': is not true.
+flutter: Another exception was thrown: 'package:flutter/src/widgets/framework.dart': Failed assertion: line 2270 pos 20: '_debugCurrentBuildTarget == context': is not true.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'scrollOffsetCorrection' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The method 'debugAssertIsValid' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'visible' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'visible' was called on null.
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Kstutz@csusb.edu">Kstutz@csusb.edu</a>
+flutter: mailto:Kstutz@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Carina.Torres@csusb.edu">Carina.Torres@csusb.edu</a>
+flutter: mailto:Carina.Torres@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Kstutz@csusb.edu">Kstutz@csusb.edu</a>
+flutter: mailto:Kstutz@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Carina.Torres@csusb.edu">Carina.Torres@csusb.edu</a>
+flutter: mailto:Carina.Torres@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Location:University Hall (UH), Room 386
+flutter: Phone:(909) 537-5921
+flutter: Fax:(909) 537-7586
+flutter: Email:sail@csusb.edu
+flutter: Regular Office Hours:Monday-Thursday8:00am-5:00pm
+flutter: Friday8:00am-4:30pm
+flutter: Location:University Hall (UH), Room 386
+flutter: Phone:(909) 537-5921
+flutter: Fax:(909) 537-7586
+flutter: Email:sail@csusb.edu
+flutter: Regular Office Hours:Monday-Thursday8:00am-5:00pm
+flutter: Friday8:00am-4:30pm
+flutter: Another exception was thrown: Incorrect use of ParentDataWidget.
+flutter: Another exception was thrown: 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart': Failed assertion: line 235 pos 16: 'indexOf(child) > index': is not true.
+flutter: Another exception was thrown: 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart': Failed assertion: line 235 pos 16: 'indexOf(child) > index': is not true.
+flutter: Another exception was thrown: 'package:flutter/src/widgets/framework.dart': Failed assertion: line 2270 pos 20: '_debugCurrentBuildTarget == context': is not true.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'scrollOffsetCorrection' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The method 'debugAssertIsValid' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'visible' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'visible' was called on null.
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Monica.Pulido@csusb.edu">Monica.Pulido@csusb.edu</a>
+flutter: mailto:Monica.Pulido@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'visible' was called on null.
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Brenda.Luis@csusb.edu">Brenda.Luis@csusb.edu</a>
+flutter: mailto:Brenda.Luis@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Victoria.Argot@csusb.edu">Victoria.Argot@csusb.edu</a>
+flutter: mailto:Victoria.Argot@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: not empty
+flutter: starting String: <a href="mailto:Cynthia.Ulloa@csusb.edu">Cynthia.Ulloa@csusb.edu</a>
+flutter: mailto:Cynthia.Ulloa@csusb.edu
+flutter: data size: 30
+flutter: incoming data: true
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Splitter:
+flutter: null
+flutter: data size: 30
+flutter: incoming data: false
+flutter: Another exception was thrown: Incorrect use of ParentDataWidget.
+flutter: Another exception was thrown: 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart': Failed assertion: line 235 pos 16: 'indexOf(child) > index': is not true.
+flutter: Another exception was thrown: 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart': Failed assertion: line 235 pos 16: 'indexOf(child) > index': is not true.
+flutter: Another exception was thrown: 'package:flutter/src/widgets/framework.dart': Failed assertion: line 2270 pos 20: '_debugCurrentBuildTarget == context': is not true.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'scrollOffsetCorrection' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The method 'debugAssertIsValid' was called on null.
+flutter: Another exception was thrown: NoSuchMethodError: The getter 'visible' was called on null.
+
+Application finished.
