@@ -271,6 +271,7 @@ class _ContactPageState extends State<ContactPage> {
         String href;
         href = scrape.splitter(data[index]);
         print("data size: ${data.length}");
+        print("dump Data: ${data[index].innerHtml}");
         print("incoming data: ${data[index].hasChildNodes()}");
 
         if (data[index].children.length == 1 &&
@@ -281,7 +282,7 @@ class _ContactPageState extends State<ContactPage> {
           return data[index].hasChildNodes()
               ? _formattedContact(data[index].children, data[index])
               : new Text(
-                  '',
+                  '${data[index].innerHtml}',
                 );
         }
       },
@@ -291,6 +292,7 @@ class _ContactPageState extends State<ContactPage> {
   Widget _formattedContact(List<doc.Element> child, doc.Element parent) {
     ContactData contactData = new ContactData();
 //    child = child.where((value) => value != "null").toList();
+print ("size of Child: ${child.length}");
     for (var tagType in child) {
       if (tagType.text == null) {
         child.remove(tagType);
