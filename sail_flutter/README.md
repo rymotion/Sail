@@ -1,8 +1,2 @@
-# sail_flutter
-
-A new Flutter project.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+[Flutter 967d1cf] Changes to null detection on data pull fixed
+ 1 file changed, 3 insertions(+), 1 deletion(-)
