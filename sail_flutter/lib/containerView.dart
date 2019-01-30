@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './pages/home.dart';
 import './pages/eventCalendar.dart';
-import './pages/calendar.dart';
-import './pages/genericPage.dart';
+import './pages/harborCalendar.dart';
 import './pages/genericTable.dart';
 import './Scrape.dart';
 import 'package:html/dom.dart' as dom;
@@ -13,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import './pages/studentID.dart';
 import './pages/contactPage.dart';
 import './pages/alumniPage.dart';
+import './pages/studentPage.dart';
 
 List<ElementFormatter> list = [];
 StatefulWidget loadedWidget;
@@ -50,6 +49,7 @@ class _MainDrawerState extends State<MainDrawer> {
     super.initState();
   }
 
+// TODO: Fix
   load() async {
     // final SharedPreferences prefs = await _prefs;
     scraper = new Scrape();
@@ -122,7 +122,7 @@ class _MainDrawerState extends State<MainDrawer> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => new GenericPage.setScraper(
+                builder: (context) => new StudentPage.setScraper(
                     (scraper = new Scrape.setLoad(newWidget)))));
         break;
       case "/sail/sail-courses":
@@ -175,10 +175,7 @@ class _MainDrawerState extends State<MainDrawer> {
 // MARK: This allows us to safely check if this is a URL Scheme safely
   _checkLaunch(String urlScheme) async {
     if (await canLaunch(urlScheme)) {
-      await launch(urlScheme,
-          forceSafariVC: false,
-          forceWebView: false,
-          statusBarBrightness: Brightness.light);
+      await launch(urlScheme);
     } else {
       // TODO: Add dialog window
       throw 'invalid urlSceme: $urlScheme';
@@ -198,10 +195,6 @@ class _MainDrawerState extends State<MainDrawer> {
               child: _buildList(),
             ),
             new Divider(),
-            new Container(
-              width: MediaQuery.of(context).size.width,
-              child: buildContact(),
-            ),
           ],
         ),
         semanticLabel: "Main Menu",
@@ -220,7 +213,11 @@ class _MainDrawerState extends State<MainDrawer> {
             return new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new CircularProgressIndicator(),
+                 new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 50.0,
+                        width: 50.0,
+                      ),
               ],
             );
             break;
@@ -233,14 +230,12 @@ class _MainDrawerState extends State<MainDrawer> {
                 itemBuilder: (context, int index) {
                   print('list: ${list[index].elementURL}');
                   return new GestureDetector(
-                    // onTapDown: _tapDown,
-                    // onTapUp: _tapUp,
-                    // onTapCancel: _tapCancel,
                     onTap: () {
                       _onTap(list[index].elementURL);
                     },
                     child: new Container(
-                      color: hasTapped ? Colors.blueAccent : Colors.white,
+                      padding: const EdgeInsets.all(5.0),
+                      color: Colors.white,
                       child: new Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -252,6 +247,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       
                     ),
                     ),
+                    excludeFromSemantics: false,
                   );
                 },
               );
@@ -265,23 +261,6 @@ class _MainDrawerState extends State<MainDrawer> {
   void _onTap(String newWidget) {
     changeBody(newWidget);
   }
-
-  // void _tapDown(TapDownDetails details){
-  //   setState((){
-  //     hasTapped = true;
-  //   });
-  // }
-
-  // void _tapUp(TapUpDetails details){
-  //   setState((){
-  //     hasTapped = false;
-  //   });
-  // }
-  // void _tapCancel(){
-  //   setState((){
-  //     hasTapped = false;
-  //   });
-  // }
   
   Widget buildContact() {
     return new FutureBuilder(
@@ -292,7 +271,11 @@ class _MainDrawerState extends State<MainDrawer> {
             return new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new CircularProgressIndicator(),
+                 new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 50.0,
+                        width: 50.0,
+                      ),
               ],
             );
             break;
@@ -300,7 +283,11 @@ class _MainDrawerState extends State<MainDrawer> {
             return new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new CircularProgressIndicator(),
+                new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 50.0,
+                        width: 50.0,
+                      ),
               ],
             );
             break;

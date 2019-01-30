@@ -1,26 +1,17 @@
-// import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:html/dom.dart' as doc;
 import 'dart:async';
 import '../Scrape.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 List list = new List();
 Scrape scrape = new Scrape.setLoad("/sail/meet-sail-staff");
+final ScrollController controller = ScrollController();
 
 class ContactPage extends StatefulWidget {
-  // Scrape dataContext = new Scrape();
-
-//  Widget child;
-
   ContactPage();
-  // static _ContactPageState of(BuildContext context) {
-  //   return (context.inheritFromWidgetOfExactType(HomeInhertied)
-  //           as HomeInhertied)
-  //       .myGenErState;
-  // }
 
   @override
   _ContactPageState createState() => new _ContactPageState();
@@ -79,27 +70,23 @@ class _ContactPageState extends State<ContactPage> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
-                  // print('Table connection does not exist.');
                   break;
                 case ConnectionState.waiting:
-                  // print('Table connection is waiting.');
-                  return new Container(
-                    height: 50.0,
-                    width: 50.0,
-                    child: new CircularProgressIndicator(),
-                  );
+                  return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
                   break;
                 case ConnectionState.active:
-                  // print('Table connection is active.');
-                  return new Container(
-                    height: 50.0,
-                    width: 50.0,
-                    child: new CircularProgressIndicator(),
-                  );
+                  return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
                   break;
                 default:
                   if (snapshot.hasData) {
-                    // print('there is data.');
                     return new Text('${snapshot.data}');
                   }
               }
@@ -108,12 +95,13 @@ class _ContactPageState extends State<ContactPage> {
         ),
         body: new SafeArea(
           child: new RefreshIndicator(
-            // child: new Text("$header"),
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: new ListView(
+              shrinkWrap: true,
               children: <Widget>[
-                // new Expanded(child: _buildMainContact()),
-                new Expanded(child: _buildTable()),
+                new Container(
+                  child: _buildMainContact(),
+                ),
+                _buildTable(),
                 // new Expanded(child: _buildTable()),
               ],
             ),
@@ -133,63 +121,55 @@ class _ContactPageState extends State<ContactPage> {
       builder: (context, AsyncSnapshot<List<doc.Element>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new CircularProgressIndicator(),
-              ],
-            );
+            return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             break;
           case ConnectionState.active:
-            return new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new CircularProgressIndicator(),
-              ],
-            );
+            return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             break;
-          // case ConnectionState.done:
-          //   break;
-          default:
+          case ConnectionState.done:
             if (snapshot.hasData) {
-              return new ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, int index) {
-                  String href;
-                  print('item builder:${snapshot.data[index].children}');
-                  snapshot.data[index].children.forEach((f) {
-                    href = scrape.splitter(f);
-                  });
-                  return new Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      new RichText(
-                        textAlign: TextAlign.center,
-                        text: new TextSpan(
-                            text: ' ${snapshot.data[index].text}',
-                            style: (href.isNotEmpty)
-                                ? new TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.normal)
-                                : new TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.normal),
-                            recognizer: new TapGestureRecognizer()
-                              ..onTap = () {
-                                (href.isNotEmpty && href != null)
-                                    ? _checkLaunch(href)
-                                    : print("none");
-                              }),
-                      ),
-                    ],
-                  );
-                },
+              print("running length: ${snapshot.data.length}");
+              return new Container(
+                padding: const EdgeInsets.all(20.0),
+                child: _contactData(snapshot.data),
               );
             } else if (snapshot.hasError) {
-            } else {}
+              return new Container(
+                padding: const EdgeInsets.all(20.0),
+                child: new Text("${snapshot.error}"),
+              );
+            } else {
+              return new Container(
+                padding: const EdgeInsets.all(20.0),
+                child: new Text("${snapshot.error}\n${snapshot.data}"),
+              );
+            }
+            break;
+          default:
+            if (snapshot.hasData) {
+              return new Container(
+                padding: const EdgeInsets.all(20.0),
+                child: _contactData(snapshot.data),
+              );
+            } else if (snapshot.hasError) {
+              return new Container(
+                padding: const EdgeInsets.all(20.0),
+                child: new Text("${snapshot.error}"),
+              );
+            } else {
+              return new Container(
+                padding: const EdgeInsets.all(20.0),
+                child: new Text("${snapshot.error}\n${snapshot.data}"),
+              );
+            }
             break;
         }
       },
@@ -198,7 +178,6 @@ class _ContactPageState extends State<ContactPage> {
 
 // MARK: Build table of data
   Widget _buildTable() {
-    _grabObjects();
     return new FutureBuilder(
       future: scrape.grabContact,
       builder:
@@ -209,23 +188,22 @@ class _ContactPageState extends State<ContactPage> {
             break;
           case ConnectionState.waiting:
             print('Table connection is waiting.');
-            return new Container(
-              height: 50.0,
-              width: 50.0,
-              child: CircularProgressIndicator(),
-            );
+            return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             break;
           case ConnectionState.active:
             print('Table connection is active.');
-            return new Container(
-              height: 50.0,
-              width: 50.0,
-              child: CircularProgressIndicator(),
-            );
+            SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             break;
           default:
             if (snapshot.hasData) {
-              // return tableCards(context, snapshot.data);
               return new Container(
                 padding: const EdgeInsets.all(20.0),
                 child: _tableFormatter(snapshot.data),
@@ -243,8 +221,7 @@ class _ContactPageState extends State<ContactPage> {
                             "You may not be properly connected to the internet.\nPlease check your settings and refresh the page.",
                         style: new TextStyle(
                           color: Colors.redAccent,
-                          fontSize:
-                              MediaQuery.of(context).textScaleFactor + 15.0,
+                          fontSize: MediaQuery.of(context).textScaleFactor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -252,8 +229,6 @@ class _ContactPageState extends State<ContactPage> {
                   ),
                 ],
               );
-              // return new Text(
-              //     'You may not be properly connected to the internet.\nPlease check your settings and refresh the page.');
             } else if (snapshot.hasError) {
               print('ERROR: ${snapshot.error.toString()}');
             }
@@ -263,75 +238,190 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   Widget _tableFormatter(List<doc.Element> data) {
-    data = data.where((value) => value.text != null).toList();
-    return new ListView.builder(
-      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+    return new GridView.builder(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0),
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: data.length,
       itemBuilder: (context, int index) {
-        String href;
-        href = scrape.splitter(data[index]);
-        print("data size: ${data.length}");
-        print("dump Data: ${data[index].innerHtml}");
-        print("incoming data: ${data[index].hasChildNodes()}");
+        String imageURL = "";
+        ContactData contactData = new ContactData(
+          title: 'test',
+        );
+        // for (var tagType in data) {
+        print(
+            "html: ${data[index].toString()}\nattr:${data[index].attributeValueSpans}\n");
 
-        if (data[index].children.length == 1 &&
-            data[index].children.first.toString() == "<html div>") {
-//          return new Text("one child div");
-          return _profileImage(data[index].children.first);
-        } else {
-          return data[index].hasChildNodes()
-              ? _formattedContact(data[index].children, data[index])
-              : new Text(
-                  '${data[index].innerHtml}',
-                );
+        for (var divData in data[index].children) {
+          print("divData: ${divData.outerHtml}\n");
+
+          // requiredData = deepData(divData);
+          if (divData.getElementsByTagName("img").first?.attributes["alt"] ==
+              "SAIL Program Logo") {
+            // return new Text('');
+            print("caught it");
+          } else {
+            // print("postParse: ${requiredData.first.outerHtml} $count");
+            imageURL =
+                divData.getElementsByTagName("img").first?.attributes["src"] ??
+                    imageURL;
+
+            print(divData.getElementsByTagName("p").isEmpty);
+            divData.getElementsByTagName("p").isEmpty
+                ? divData.getElementsByTagName("div").forEach((f) {
+                    if (f.hasChildNodes()) {
+                      f.children.forEach((x) {
+                        switch (x.toString()) {
+                          case "<html b>":
+                            contactData.profileName = x?.text ?? null;
+                            contactData.title = x.outerHtml;
+                            break;
+
+                          case "<html strong>":
+                            contactData.profileName = x?.text ?? null;
+                            contactData.title = x.outerHtml;
+                            break;
+                          case "<html a>":
+                            contactData.emailURL =
+                                x?.attributes["href"] ?? null;
+                            contactData.eName = x?.text ?? null;
+                            break;
+                          default:
+                            contactData.title = x.text;
+                            break;
+                        }
+
+                        contactData.title = f.text;
+                        print("running text: ${f.text}");
+                      });
+
+                      contactData.profileName = contactData?.name ?? "";
+                      contactData.title = contactData?.officeTitle ?? "";
+                      contactData.eName = contactData?.emailLabel ?? "";
+                      contactData.emailURL = contactData?.emailURL ?? "";
+                    }
+                  })
+                : divData.getElementsByTagName("p").forEach((f) {
+                    print("${f.innerHtml}");
+                    print("${f.children}");
+                    print("${f.text}");
+                    f.children.forEach((x) {
+                      switch (x.toString()) {
+                        case "<html b>":
+                          contactData.profileName = x?.text ?? null;
+
+                          break;
+
+                        case "<html strong>":
+                          contactData.profileName = x?.text ?? null;
+                          break;
+                        case "<html a>":
+                          contactData.emailURL = x?.attributes["href"] ?? null;
+                          contactData.eName = x?.text ?? null;
+                          break;
+                        case "<html p>":
+                          if (x.text != "" || x.text.isNotEmpty) {}
+                          break;
+
+                        default:
+                          contactData.title = x.text;
+                          print("default: ${x.text}");
+                          break;
+                      }
+                      contactData.title = f?.text ?? "null";
+                    });
+                  });
+            return _formattedContact(contactData, imageURL);
+          }
         }
       },
     );
   }
 
-  Widget _formattedContact(List<doc.Element> child, doc.Element parent) {
-    ContactData contactData = new ContactData();
-//    child = child.where((value) => value != "null").toList();
-print ("size of Child: ${child.length}");
-    for (var tagType in child) {
-      if (tagType.text == null) {
-        child.remove(tagType);
-      } else {
-        switch (tagType.toString()) {
-          case "<html b>":
-            contactData.profileName = tagType?.text ?? null;
-            break;
-          // case "<html br>":
-          //   contactData.title = tagType.outerHtml;
-          //   break;
-          case "<html strong>":
-            contactData.profileName = tagType?.text ?? null;
-            break;
-          case "<html a>":
-            contactData.emailURL = tagType?.attributes["href"] ?? null;
-            contactData.eName = tagType?.text ?? null;
-            break;
-          case "<html p>":
-            if (tagType.text != " " || tagType.text != null) {
-              child.remove(tagType);
-            }
-            break;
-
-          // case "<html br>":
-          //   contactData.title = tagType.text;
-          // break;
-          default:
-            contactData.title = parent.text;
-            break;
-        }
-      }
-    }
+// TODO: Fix
+  Widget _formattedContact(ContactData contactData, String imageURL) {
     String href;
 
     if (contactData?.name != null) {
       return new GestureDetector(
         onTap: () {
-          _checkLaunch(contactData.emailURL);
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Scaffold(
+                body: SafeArea(
+                  child: Column(
+
+                    children: <Widget>[
+                      // Image
+                      new Image.network(
+                        imageURL,
+                        alignment: Alignment.topCenter,
+                        height: 200.0,
+                        width: 200.0,
+                        excludeFromSemantics: false,
+                        semanticLabel: '${contactData.name}',
+                      ),
+                      // Name
+                      new RichText(
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
+                        text: new TextSpan(
+                          text: '${contactData.name}',
+                          style: new TextStyle(
+                              color: Colors.black,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      // Office
+                      new RichText(
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
+                        text: new TextSpan(
+                          text:
+                              '${contactData.title.replaceFirst(contactData.name, "").replaceAll(contactData.emailLabel, "")}',
+                          style: new TextStyle(
+                              color: Colors.black,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                      // Contact
+                      new MaterialButton(
+                        // color: Colors.blueAccent,
+                        onPressed: () {
+                          _checkLaunch(contactData.email);
+                        },
+                        child: new Row(
+                          children: <Widget>[
+                            new Icon(
+                              Icons.mail_outline,
+                              color: Colors.blue,
+                            ),
+                            new RichText(
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.fade,
+                              text: new TextSpan(
+                                text: '${contactData.emailLabel}',
+                                style: new TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
         },
         child: new Container(
           decoration: new BoxDecoration(
@@ -341,49 +431,38 @@ print ("size of Child: ${child.length}");
                 width: 1.5,
               ),
               borderRadius: new BorderRadius.circular(10.0)),
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(5.0),
           child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisSize: MainAxisSize.,
             children: <Widget>[
+              // Image
+              new Image.network(
+                imageURL,
+                alignment: Alignment.topCenter,
+                height: 125.0,
+                width: 125.0,
+                excludeFromSemantics: false,
+                semanticLabel: '${contactData.name}',
+              ),
+              
               // Name
-              new RichText(
-                textAlign: TextAlign.start,
-                text: new TextSpan(
-                  text: '${contactData.name}',
-                  style: new TextStyle(
-                      color: Colors.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              // Office
-              new RichText(
-                textAlign: TextAlign.start,
-                text: new TextSpan(
-                  // text: '${contactData.officeTitle}',
-                  text: (contactData.officeTitle != null)
-                      ? '${contactData.officeTitle.replaceAll(contactData.name, "").replaceAll(contactData.emailLabel, "")}'
-                      : "",
-                  style: new TextStyle(
-                      color: Colors.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.normal),
-                ),
-              ),
-              // Contact
               new Row(
                 children: <Widget>[
                   new Icon(
-                    Icons.mail_outline,
+                    Icons.info_outline,
                     color: Colors.blue,
+                    size: 20.0,
                   ),
                   new RichText(
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.clip,
                     text: new TextSpan(
-                      text: '${contactData.emailLabel}',
+                      text: '${contactData.name}',
                       style: new TextStyle(
-                          color: Colors.blue,
+                          color: Colors.black,
                           fontSize: 15.0,
-                          fontWeight: FontWeight.normal),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -397,8 +476,30 @@ print ("size of Child: ${child.length}");
     }
   }
 
-  String parseTitle(String parseTitle) {
-    // return parseTitle.replaceAll(, "")
+  List<doc.Element> deepData(doc.Element data) {
+    List<doc.Element> returnedData = new List<doc.Element>();
+    switch (data.toString()) {
+      case "<html div>":
+        for (var child in data.children) {
+          return deepData(child);
+        }
+        break;
+      case "<html br>":
+        returnedData.add(data);
+        break;
+      case "<html p>":
+        if (data.text == "" || data.text == " ") {
+          // Do nothing
+          break;
+        } else {
+          returnedData.add(data);
+        }
+        break;
+      default:
+        returnedData.add(data);
+        break;
+    }
+    return returnedData;
   }
 
   Widget _profileImage(doc.Element data) {
@@ -452,7 +553,11 @@ print ("size of Child: ${child.length}");
                   } else {
                     return new Column(
                       children: <Widget>[
-                        new Icon(Icons.error_outline, color: Colors.black),
+                        new Icon(
+                          Icons.error_outline,
+                          color: Colors.black,
+                          size: 5.0,
+                        ),
                         new Text("Something went wrong. Please try again.")
                       ],
                     );
@@ -461,7 +566,11 @@ print ("size of Child: ${child.length}");
                 default:
                   return new Column(
                     children: <Widget>[
-                      new CircularProgressIndicator(),
+                      SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      ),
                     ],
                   );
                   break;
@@ -480,28 +589,147 @@ print ("size of Child: ${child.length}");
 //    return new Text('${data.children.first.children.first.attributes["src"].toString()}');
   }
 
-// MARK: Gets data in body of webpage
-  Widget _pageData(doc.Element data) {
-    for (var internalData in data.getElementsByClassName("content")) {
-      return new Text("${internalData.toString()} : ${internalData.outerHtml}");
-    }
-    return new Text('data');
+// MARK: Gets main office contact data should be six elements
+/*
+  [0] Location
+  [1] Phone
+  [2] Fax
+  [3] Email
+  [4] office hours
+  [5] office hours 2
+ */
+  Widget _contactData(List<doc.Element> data) {
+    return new ListView.builder(
+      shrinkWrap: true,
+      itemCount: data.length,
+      itemBuilder: (context, int index) {
+        switch (data[index].text.contains("Phone")) {
+          case true:
+            return new MaterialButton(
+              onPressed: () {
+                _checkLaunch(data[index]
+                    .text
+                    .replaceAll("Phone:", "tel:+1 ")
+                    .replaceAll("(", "")
+                    .replaceAll(")", ""));
+                print(data[index].text.replaceAll("Phone", "tel"));
+              },
+              child: new Row(
+                children: <Widget>[
+                  new Icon(
+                    Icons.phone_in_talk,
+                    color: Colors.blue,
+                  ),
+                  new RichText(
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.fade,
+                    text: new TextSpan(
+                      text: '${data[index].text}',
+                      style: new TextStyle(
+                          color: Colors.blue,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                ],
+              ),
+            );
+            break;
+          default:
+            switch (data[index].getElementsByTagName('a').isNotEmpty) {
+              case true:
+                return new MaterialButton(
+                  // color: Colors.blueAccent,
+                  onPressed: () {
+                    // data[index].text.replaceAll("Phone", "tel:");
+                    _checkLaunch(data[index]
+                        .getElementsByTagName('a')
+                        .first
+                        .attributes["href"]);
+                    print(data[index]
+                        .getElementsByTagName('a')
+                        .first
+                        .attributes["href"]);
+                  },
+                  child: new Row(
+                    children: <Widget>[
+                      new Icon(
+                        Icons.mail_outline,
+                        color: Colors.blue,
+                      ),
+                      new RichText(
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
+                        text: new TextSpan(
+                          text: '${data[index].text}',
+                          style: new TextStyle(
+                              color: Colors.blue,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+                break;
+              default:
+                return new Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: new RichText(
+                    textAlign: TextAlign.start,
+                    text: new TextSpan(
+                      text: '${data[index].text}',
+                      style: (new TextStyle(
+                          color: Colors.black,
+                          fontSize:
+                              MediaQuery.of(context).textScaleFactor + 15.0,
+                          fontWeight: FontWeight.normal)),
+                    ),
+                  ),
+                );
+                break;
+            }
+            break;
+        }
+      },
+      physics: NeverScrollableScrollPhysics(),
+    );
   }
 
 // MARK: Opens embeded urls if any
   _checkLaunch(String urlScheme) async {
     if (await canLaunch(urlScheme)) {
-      await launch(urlScheme,
-          forceSafariVC: false,
-          forceWebView: false,
-          statusBarBrightness: Brightness.light);
+      await launch(urlScheme);
     } else {
       if (urlScheme.contains('//')) {
         // var somethingBack = urlScheme.split('//');
         var somethingBack = urlScheme.replaceFirst('//', 'https:');
         _checkLaunch(somethingBack);
+      } else if (urlScheme == " " || urlScheme == null) {
+        return new SimpleDialog(
+          children: <Widget>[
+            new Center(
+              child: new Container(
+                  child: new Text(
+                      'The person you are trying to contact might not have an email setup at this time.')),
+            )
+          ],
+        );
       } else {
         // TODO: Add dialog window
+        showDialog(
+            context: context,
+            builder: (context) {
+              return new SimpleDialog(
+                children: <Widget>[
+                  new Center(
+                    child: new Container(
+                        child: new Text(
+                            'You may be missing a required application\nfor $urlScheme')),
+                  )
+                ],
+              );
+            });
         throw 'invalid urlSceme: $urlScheme';
         // _callError();
       }

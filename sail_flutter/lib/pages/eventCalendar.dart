@@ -57,13 +57,13 @@ class _EventCalState extends State<EventsCalendar> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Sail Events'),
+        title: new Text('SAIL Events'),
       ),
       body: new SafeArea(
         child: new ListView(
           // mainAxisAlignment: MainAxisAlignment.start,
           // mainAxisSize: MainAxisSize.max,
-          
+          shrinkWrap: true,
           children: <Widget>[
             new Container(
               height: 25.0,
@@ -78,12 +78,9 @@ class _EventCalState extends State<EventsCalendar> {
               ),
             ),
             new Container(
-              height: 300.0,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(20.0),
               child: _buildFutureContext(calendarHandler.eventList),
             ),
-            new Divider(),
+            // new Divider(),
             new Container(
               height: 25.0,
               width: MediaQuery.of(context).size.width,
@@ -97,7 +94,7 @@ class _EventCalState extends State<EventsCalendar> {
               ),
             ),
             new Container(
-              height: 300.0,
+              height: MediaQuery.of(context).size.height - 300,
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.all(20.0),
               child: _buildPastContext(calendarHandler.pastEvent),
@@ -109,33 +106,50 @@ class _EventCalState extends State<EventsCalendar> {
   }
 
   Widget _buildFutureContext(Future<Events> data) {
-    load();
+    // load();
     print('Hit build at event Row.');
     return new FutureBuilder(
       future: data,
       builder: (BuildContext context, AsyncSnapshot<Events> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
-            // produce Error
+            return new Container(
+              height: 50.0,
+              width: 50.0,
+              padding: const EdgeInsets.all(20.0),
+              child: new Text("${snapshot.error}"),
+            );
             break;
           case ConnectionState.waiting:
-            return new Container(
-              height: 100.0,
-              width: 100.0,
-              child: CircularProgressIndicator(),
-            );
+          return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 50.0,
+                        width: 50.0,
+                      );
             break;
           default:
             if (snapshot.hasError) {
               print('Snapshot Error: ${snapshot.error.toString()}');
             } else {
               if (snapshot.data.items.length != 0) {
-                return _buildCalendarCard(context, snapshot.data.items);
+                return Container(
+                  height: 500.0,
+                  padding: const EdgeInsets.all(20.0),
+                  child: _buildCalendarCard(context, snapshot.data.items),
+                );
               } else {
                 print("no events.");
-                return new RichText(
-                  text: new TextSpan(text: "There are no upcoming events."),
-                  overflow: TextOverflow.fade,
+                return new Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: new RichText(
+                    textAlign: TextAlign.start,
+                    text: new TextSpan(
+                        text: 'There are no new events.',
+                        style: new TextStyle(
+                            color: Color.fromRGBO(0, 0, 0, 100.0),
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 );
               }
             }
@@ -155,19 +169,19 @@ class _EventCalState extends State<EventsCalendar> {
             // produce Error
             break;
           case ConnectionState.waiting:
-            return new Container(
-              height: 100.0,
-              width: 100.0,
-              child: CircularProgressIndicator(),
-            );
+            return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 50.0,
+                        width: 50.0,
+                      );
             break;
           default:
             if (snapshot.hasError) {
               print('Snapshot Error: ${snapshot.error.toString()}');
             } else {
               if (snapshot.data.items.length != 0) {
-                
-                return _buildCalendarCard(context, snapshot.data.items.reversed.toList());
+                return _buildCalendarCard(
+                    context, snapshot.data.items.reversed.toList());
               } else {
                 print("no events.");
                 return new RichText(
@@ -180,11 +194,14 @@ class _EventCalState extends State<EventsCalendar> {
       },
     );
   }
+
   Widget _buildCalendarCard(BuildContext context, List<Event> data) {
     // Events events = data.data as Events;
-    if (data != null) {
+    print("size of data indecies: ${data.length}");
+    if (data != null || data.length != 0) {
       return new ListView.builder(
-        itemCount: data.length,
+        itemCount: 5,
+        physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, int index) {
           return new GestureDetector(
             onTap: () {
@@ -193,7 +210,10 @@ class _EventCalState extends State<EventsCalendar> {
               //     new MaterialPageRoute(
               //         builder: (context) =>
               //             new DetailScreen(events.items[index])));
-              showModalBottomSheet(context: context, builder: (context) => new DetailScreen(data[index]));
+              print("${data.length}");
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) => new DetailScreen(data[index]));
             },
             child: new Column(
               children: <Widget>[
@@ -210,11 +230,11 @@ class _EventCalState extends State<EventsCalendar> {
         },
       );
     } else {
-      return new Container(
-        height: 100.0,
-        width: 100.0,
-        child: CircularProgressIndicator(),
-      );
+      return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 50.0,
+                        width: 50.0,
+                      );
     }
   }
 

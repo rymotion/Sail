@@ -1,5 +1,7 @@
 PODS:
   - Alamofire (4.6.0)
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - shared_preferences (0.0.1):
     - Flutter
@@ -9,10 +11,11 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - device_info (from `/Users/ryanpaglinawan/.pub-cache/hosted/pub.dartlang.org/device_info-0.3.0/ios`)
   - Flutter (from `/Users/ryanpaglinawan/Library/flutter/bin/cache/artifacts/engine/ios`)
   - shared_preferences (from `/Users/ryanpaglinawan/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/ios`)
   - SwiftSoup
-  - url_launcher (from `/Users/ryanpaglinawan/.pub-cache/hosted/pub.dartlang.org/url_launcher-4.0.2/ios`)
+  - url_launcher (from `/Users/ryanpaglinawan/.pub-cache/git/plugins-4d702ad711f014760434122ce2bd06d2f41b5c6c/packages/url_launcher/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -20,15 +23,18 @@ SPEC REPOS:
     - SwiftSoup
 
 EXTERNAL SOURCES:
+  device_info:
+    :path: "/Users/ryanpaglinawan/.pub-cache/hosted/pub.dartlang.org/device_info-0.3.0/ios"
   Flutter:
     :path: "/Users/ryanpaglinawan/Library/flutter/bin/cache/artifacts/engine/ios"
   shared_preferences:
     :path: "/Users/ryanpaglinawan/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/ios"
   url_launcher:
-    :path: "/Users/ryanpaglinawan/.pub-cache/hosted/pub.dartlang.org/url_launcher-4.0.2/ios"
+    :path: "/Users/ryanpaglinawan/.pub-cache/git/plugins-4d702ad711f014760434122ce2bd06d2f41b5c6c/packages/url_launcher/ios"
 
 SPEC CHECKSUMS:
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
   SwiftSoup: db0634b1571304cfef38eb0ee6505eb7d06765f1

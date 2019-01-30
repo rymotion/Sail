@@ -2,6 +2,11 @@ import 'dart:async';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
+/**
+ * About: This prgram handles the logic for communicating to the Google Calendars for data
+ * think of this as the Scrape.dart but for calendars
+ */
+
 // Event Calendar: aglqj6c518aatdsn5244ubgnr4@group.calendar.google.com
 // Harbor: moe6r4aen5mu8aelggtli24q3k@group.calendar.google.com
 
@@ -30,7 +35,9 @@ class CalDevParse {
   // Future<bool> get initRoomCal => _initRoom();
   Future<Events> get eventList => _getEvents();
   Future<Events> get pastEvent => _getPastEvents();
-  Future<Events> get roomAvailable => _getOpen();
+  Future<Events> get future_Events => _getOpen();
+  Future<Events> get past_Events => _getRoomStatus();
+  Future<Events> get runningCurrEvent => _currentlyRunningEvents();
   Events get lineUp => currLine;
 
   Future<Events> _getEvents() async {
@@ -90,10 +97,12 @@ class CalDevParse {
       print("${client.runtimeType.toString()}");
       var calendar = new CalendarApi(client);
       var now = new DateTime.now();
+      var week = now.add(new Duration(days: 7));
+
       try {
         var result = await calendar.events
             .list('moe6r4aen5mu8aelggtli24q3k@group.calendar.google.com',
-                singleEvents: false, timeMin: now.toUtc(), timeMax: now.toUtc(),);
+                singleEvents: false, timeMin: now.toUtc(), timeMax: week.toUtc());
         returnOnHit = result;
         return returnOnHit;
       } catch (e) {
@@ -105,12 +114,56 @@ class CalDevParse {
     return returnOnHit;
   }
 
-  // Future<bool> _initEvent() {
-  //   bool data = true;
-  //   ;
-  // }
+  Future <Events> _getRoomStatus() async {
+    Events returnOnHit = new Events();
+    var completer = new Completer();
+    await clientViaServiceAccount(accountCredentials, _scopes)
+        .then((client) async {
+      print("sucess");
+      print("${client.runtimeType.toString()}");
+      var calendar = new CalendarApi(client);
+      var now = new DateTime.now();
+      var week = now.subtract(new Duration(days: 7));
 
-  // Future<bool> _initRoom() {
-  //   return true;
-  // }
+      try {
+        var result = await calendar.events
+            .list('moe6r4aen5mu8aelggtli24q3k@group.calendar.google.com',
+                singleEvents: false, timeMax: now.toUtc(), timeMin: week.toUtc(),);
+        returnOnHit = result;
+        returnOnHit.items = returnOnHit.items.reversed.toList();
+        return returnOnHit;
+      } catch (e) {
+        print(e.toString());
+      }
+    });
+    completer.complete();
+    print('hit end.');
+    return returnOnHit;
+  }
+
+  Future<Events> _currentlyRunningEvents() async {
+    Events returnOnHit = new Events();
+    var completer = new Completer();
+    await clientViaServiceAccount(accountCredentials, _scopes)
+        .then((client) async {
+      print("sucess");
+      print("${client.runtimeType.toString()}");
+      var calendar = new CalendarApi(client);
+      var now = new DateTime.now();
+      var botHour = now.subtract(new Duration(minutes: 1));
+      var topHour = now.add(new Duration(minutes: 1));
+      try {
+        var result = await calendar.events
+            .list('moe6r4aen5mu8aelggtli24q3k@group.calendar.google.com',
+                singleEvents: false, timeMax: topHour.toUtc(), timeMin: botHour.toUtc(),);
+        returnOnHit = result;
+        return returnOnHit;
+      } catch (e) {
+        print(e.toString());
+      }
+    });
+    completer.complete();
+    print('hit end.');
+    return returnOnHit;
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
@@ -7,8 +6,12 @@ import '../Scrape.dart' as scraper;
 import 'package:sail_flutter/containerView.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:url_launcher/url_launcher.dart';
+import '../TapSocialMedia.dart' as tapper;
 
 List list = new List();
+
+final GlobalKey<RefreshIndicatorState> _refreshIndicator =
+    new GlobalKey<RefreshIndicatorState>();
 
 final scraper.Scrape scrape = new scraper.Scrape();
 
@@ -67,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   var spacer = new SizedBox(height: 32.0);
-  MainDrawer drawer = new MainDrawer();
+  // MainDrawer drawer = new MainDrawer();
 
   @override
   Widget build(BuildContext context) => new Scaffold(
@@ -81,146 +84,231 @@ class _MyHomePageState extends State<MyHomePage> {
                   break;
                 case ConnectionState.waiting:
                   print('Table connection is waiting.');
-                  return new Container(
+                  return new SizedBox(
+                    child: CircularProgressIndicator(),
                     height: 100.0,
                     width: 100.0,
-                    child: CircularProgressIndicator(),
                   );
                   break;
                 case ConnectionState.active:
                   print('Table connection is active.');
-                  return new Container(
+                  return new SizedBox(
+                    child: CircularProgressIndicator(),
                     height: 100.0,
                     width: 100.0,
-                    child: CircularProgressIndicator(),
                   );
                   break;
                 default:
                   if (snapshot.hasData) {
                     print('there is data.');
-                    return new Text('${snapshot.data}');
+                    return new Tooltip(
+                      message: snapshot.data,
+                      child: Text(
+                        '${snapshot.data}',
+                        semanticsLabel: snapshot.data,
+                      ),
+                    );
                   }
               }
             },
           ),
         ),
-        drawer: drawer,
+        drawer: new MainDrawer(),
         body: new SafeArea(
-          child: new RefreshIndicator(
-            // child: new Text("$header"),
-            // TODO: add instagram feed and program contact details
-            child: _buildContext(),
-            onRefresh: _refreshHandler,
-          ),
+          child: _buildContext(),
         ),
+        persistentFooterButtons: <Widget>[
+          Row(
+            children: <Widget>[
+              Tooltip(
+                message: 'Follow on Instagram',
+                verticalOffset: 48,
+                child: FlatButton(
+                  child: Image.asset(
+                    'icons/instagram.png',
+                    height: 50,
+                    width: 50,
+                    semanticLabel: 'Open Instagram',
+                  ),
+                  onPressed: () {
+                    _checkLaunch(tapper.instagramEndpoint);
+                  },
+                ),
+                /*
+            IconButton(
+              icon: AssetImage(bundle: null, name: "instagram.png"),
+              onPressed: () {
+                _checkLaunch(tapper.instagramEndpoint);
+              },
+            ), */
+              ),
+            ],
+          ),
+        ],
       );
 
   Widget _buildContext() {
-
-    return new FutureBuilder(
-      future: scrape.getBody,
-      builder: (BuildContext context, AsyncSnapshot<List<dom.Element>> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            //  ERROR
-            break;
-          case ConnectionState.waiting:
-            return new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                new CircularProgressIndicator(),
-              ],
-            );
-            break;
-
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              print('${snapshot.error.toString()}');
-            } else if (snapshot.hasData) {
-
-              // snapshot.data.forEach((data){
-              //   href = scrape.splitter(data);
-              //   body.add(data);
-              //   print("returned data: ${data.toString()}");
-              //   print("current running length: ${body.length}");
-              // });
-              return new ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, int index){
-                  String href;
-                  snapshot.data[index].children.forEach((f) {
-
-                    href = scrape.splitter(f);
-                  });
-                  if (snapshot.data[index].toString() == "<html h2>") {
-                    return new Container(
-                      padding: const EdgeInsets.all(20.0),
-                      child: new RichText(
-                        textAlign: TextAlign.start,
-                        text: new TextSpan(
-                          text: '${snapshot.data[index].text}',
-                          style: (href != null)
-                              ? new TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold)
-                              : new TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () {
-                              (href.isNotEmpty && href != null)
-                                  ? _checkLaunch(href)
-                                  : print("none");
-                            },
-                        ),
-                      ),
-                    );
-                  } else if (snapshot.data[index].toString() == "<html p>") {
-                    return new Container(
-                      padding: const EdgeInsets.all(20.0),
-                      child: new RichText(
-                        textAlign: TextAlign.start,
-                        text: new TextSpan(
-                          text: '${snapshot.data[index].text}',
-                          style: (href != null)
-                              ? new TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.normal)
-                              : new TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.normal),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () {
-                              (href.isNotEmpty && href != null)
-                                  ? _checkLaunch(href)
-                                  : print("none");
-                            },
-                        ),
-                      ),
-                    );
-                  }
-                },
+    return new RefreshIndicator(
+      key: _refreshIndicator,
+      onRefresh: _refreshHandler,
+      child: new FutureBuilder(
+        future: scrape.getBody,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<dom.Element>> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              //  ERROR
+              break;
+            case ConnectionState.waiting:
+              return new Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  new SizedBox(
+                    child: CircularProgressIndicator(),
+                    height: 100.0,
+                    width: 100.0,
+                  ),
+                ],
               );
-            }
-            break;
-          default:
-            break;
-        }
-      },
+              break;
+
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                print('${snapshot.error.toString()}');
+              } else if (snapshot.hasData) {
+                // snapshot.data.forEach((data){
+                //   href = scrape.splitter(data);
+                //   body.add(data);
+                //   print("returned data: ${data.toString()}");
+                //   print("current running length: ${body.length}");
+                // });
+
+                return new ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    String href;
+                    String buttonTitle;
+                    snapshot.data[index].children.forEach((f) {
+                      href = scrape.splitter(f);
+                      buttonTitle = f.text;
+                    });
+                    if (snapshot.data[index].toString() == "<html h2>") {
+                      return new Container(
+                        padding: const EdgeInsets.all(20.0),
+                        child: new RichText(
+                          textAlign: TextAlign.start,
+                          text: new TextSpan(
+                            text: '${snapshot.data[index].text}',
+                            style: (href != null)
+                                ? new TextStyle(
+                                    color: Colors.blue,
+                                    fontSize:
+                                        MediaQuery.of(context).textScaleFactor +
+                                            15.0,
+                                    fontWeight: FontWeight.bold)
+                                : new TextStyle(
+                                    color: Colors.black,
+                                    fontSize:
+                                        MediaQuery.of(context).textScaleFactor +
+                                            15.0,
+                                    fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.data[index].toString() == "<html p>" &&
+                        snapshot.data[index].hasChildNodes()) {
+                      print(
+                          "this is child render: ${snapshot.data[index].getElementsByTagName('a').isNotEmpty}");
+                      switch (snapshot.data[index]
+                          .getElementsByTagName('a')
+                          .isNotEmpty) {
+                        case true:
+                          return new Container(
+                            padding: const EdgeInsets.all(20.0),
+                            child: new Column(
+                              children: <Widget>[
+                                new RichText(
+                                  textAlign: TextAlign.start,
+                                  text: new TextSpan(
+                                    text: '${snapshot.data[index].text}',
+                                    style: (href != null)
+                                        ? new TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.normal)
+                                        : new TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.normal),
+                                  ),
+                                ),
+                                new FlatButton(
+                                  color: Colors.blue,
+                                  child: new RichText(
+                                    textAlign: TextAlign.start,
+                                    text: new TextSpan(
+                                      text: '$buttonTitle',
+                                      style: (href != null)
+                                          ? new TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.normal)
+                                          : new TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    (href.isNotEmpty && href != null)
+                                        ? _checkLaunch(href)
+                                        : print("none");
+                                  },
+                                  // onTap = () {
+                                  //         (href.isNotEmpty && href != null)
+                                  //             ? _checkLaunch(href)
+                                  //             : print("none");
+                                  //       },
+                                ),
+                              ],
+                            ),
+                          );
+                          break;
+                        default:
+                          return new Container(
+                            padding: const EdgeInsets.all(20.0),
+                            child: new RichText(
+                              textAlign: TextAlign.start,
+                              text: new TextSpan(
+                                text: '${snapshot.data[index].text}',
+                                style: (new TextStyle(
+                                    color: Colors.black,
+                                    fontSize:
+                                        MediaQuery.of(context).textScaleFactor +
+                                            15.0,
+                                    fontWeight: FontWeight.normal)),
+                              ),
+                            ),
+                          );
+                          break;
+                      }
+                    }
+                  },
+                );
+              }
+              break;
+            default:
+              break;
+          }
+        },
+      ),
     );
   }
 
   _checkLaunch(String urlScheme) async {
     print(urlScheme);
     if (await canLaunch(urlScheme)) {
-      await launch(urlScheme,
-          forceSafariVC: false,
-          forceWebView: false,
-          statusBarBrightness: Brightness.light);
+      await launch(urlScheme);
     } else {
       if (urlScheme.contains('//')) {
         // var somethingBack = urlScheme.split('//');
@@ -266,6 +354,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<Null> _refreshHandler() async {
     print("hit refresh Handler");
+    // _buildContext();
     _grabObjects();
   }
 }

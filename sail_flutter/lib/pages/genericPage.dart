@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -88,19 +87,19 @@ class _GenericPageState extends State<GenericPage> {
                   break;
                 case ConnectionState.waiting:
                   // print('Table connection is waiting.');
-                  return new Container(
-                    height: 50.0,
-                    width: 50.0,
-                    child: new CircularProgressIndicator(),
-                  );
+                  return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
                   break;
                 case ConnectionState.active:
                   // print('Table connection is active.');
-                  return new Container(
-                    height: 50.0,
-                    width: 50.0,
-                    child: new CircularProgressIndicator(),
-                  );
+                  return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
                   break;
                 default:
                   if (snapshot.hasData) {
@@ -145,19 +144,19 @@ class _GenericPageState extends State<GenericPage> {
             break;
           case ConnectionState.waiting:
             print('Table connection is waiting.');
-            return new Container(
-              height: 50.0,
-              width: 50.0,
-              child: CircularProgressIndicator(),
-            );
+            return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             break;
           case ConnectionState.active:
             print('Table connection is active.');
-            return new Container(
-              height: 50.0,
-              width: 50.0,
-              child: CircularProgressIndicator(),
-            );
+            return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             break;
           default:
             if (snapshot.hasData) {
@@ -331,30 +330,6 @@ class _GenericPageState extends State<GenericPage> {
             );
             break;
           case "<html thead>":
-            // return new Container(
-            //   padding: const EdgeInsets.all(20.0),
-            //   child: new RichText(
-            //       textAlign: TextAlign.start,
-            //       text: new TextSpan(
-            //         text: ' ${data[index].outerHtml} thread container',
-            //         style: (href != null)
-            //             ? new TextStyle(
-            //                 color: Colors.blue,
-            //                 fontSize: 15.0,
-            //                 fontWeight: FontWeight.bold)
-            //             : new TextStyle(
-            //                 color: Colors.black,
-            //                 fontSize: 15.0,
-            //                 fontWeight: FontWeight.normal),
-            //         recognizer: new TapGestureRecognizer()
-            //           ..onTap = () {
-            //             (href.isNotEmpty && href != null)
-            //                 ? _checkLaunch(href)
-            //                 : print("none");
-            //           },
-            //       ),
-            //     ),
-            // );
             return new Divider();
             break;
           case "<html table>":
@@ -546,11 +521,11 @@ class _GenericPageState extends State<GenericPage> {
             // Make an error dialog box appear
             break;
           case ConnectionState.active:
-            return new Container(
-              height: 100.0,
-              width: 100.0,
-              child: CircularProgressIndicator(),
-            );
+            return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             break;
           default:
             if (snapshot.hasData) {
@@ -621,11 +596,11 @@ class _GenericPageState extends State<GenericPage> {
               );
             } else if (snapshot.hasError) {
             } else {
-              return new Container(
-                height: 100.0,
-                width: 100.0,
-                child: CircularProgressIndicator(),
-              );
+              return new SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                      );
             }
             break;
         }
@@ -678,10 +653,7 @@ class _GenericPageState extends State<GenericPage> {
 // MARK: Opens embeded urls if any
   _checkLaunch(String urlScheme) async {
     if (await canLaunch(urlScheme)) {
-      await launch(urlScheme,
-          forceSafariVC: false,
-          forceWebView: false,
-          statusBarBrightness: Brightness.light);
+      await launch(urlScheme);
     } else {
       if (urlScheme.contains('//')) {
         // var somethingBack = urlScheme.split('//');

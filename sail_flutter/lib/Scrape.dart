@@ -3,7 +3,11 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/parser_console.dart';
 import 'package:html/dom.dart';
-import 'dart:io';
+
+/*
+About: This program contains the classes for:
++ menu (Element Formatter)
+ */
 
 http.IOClient ioClient = new http.IOClient();
 String header = '';
@@ -17,9 +21,8 @@ class ElementFormatter {
   String elementURL;
   String elementAccessible;
 
-  ElementFormatter({
-    this.elementHeader, this.elementURL, this.elementAccessible
-  });
+  ElementFormatter(
+      {this.elementHeader, this.elementURL, this.elementAccessible});
 
   String get grabHeader => elementHeader;
   String get grabURL => elementHeader;
@@ -32,9 +35,7 @@ class PageFormatter {
   List<Element> pageBody;
   List<TableFormatter> table;
 
-  PageFormatter({
-    this.header, this.subtitle, this.pageBody, this.table
-  });
+  PageFormatter({this.header, this.subtitle, this.pageBody, this.table});
 
   String get grabHeader => header;
   String get grabSubtitle => subtitle;
@@ -49,14 +50,10 @@ class ContactData {
   String title;
   String eName;
 
-  ContactData({
-    this.profileName,
-    this.emailURL,
-    this.profileURL,
-    this.title,
-    this.eName
+  ContactData(
+      {this.profileName, this.emailURL, this.profileURL, this.title, this.eName
 //    this.subtitle
-  });
+      });
 
   String get name => profileName;
   String get headshotURL => profileURL;
@@ -74,15 +71,14 @@ class TableFormatter {
   String dateTime;
   String roomCall;
 
-  TableFormatter({
-      this.courseTitle,
+  TableFormatter(
+      {this.courseTitle,
       this.lecturer,
       this.courseSection,
       this.catalogNum,
       this.daySched,
       this.dateTime,
-      this.roomCall
-  });
+      this.roomCall});
 
   String get courseHead => courseTitle;
   String get lecName => lecturer;
@@ -95,7 +91,7 @@ class TableFormatter {
 
 class Scrape {
   List<TableFormatter> table = new List();
-  String lastUsed;
+  // String lastUsed;
   String url = '/sail';
   String loadingURL;
 
@@ -106,7 +102,7 @@ class Scrape {
   }
 
   Scrape.setLoad(String url) {
-    lastUsed = baseURL;
+    // lastUsed = baseURL;
     loadingURL = baseURL + url;
     print('from Scrape:\n $loadingURL');
   }
@@ -123,6 +119,7 @@ class Scrape {
   Future<List> get sideMenu => _getSideBar();
   Future<List<Element>> get getPage => _pageElements();
   Future<List<Element>> get grabContact => _contactList();
+  // Future<List<Element>> get getMultiPage => _multiPage();
   // String get href() => _splitter(toSplit);
 //  MARK: Makes sure that site is accessible.
   Future<bool> _access() async {
@@ -173,25 +170,27 @@ class Scrape {
       for (var contactList in document.getElementsByClassName(
           "entity entity-bean bean-csusb-bb-contact-block clearfix")) {
         contactList.getElementsByTagName('p').forEach((f) {
-          contact.add(f);
-          print('${f.text}');
+          if (!f.text.contains("Fax")){
+            contact.add(f);
+          }
+          print('contact data: ${f.text}');
         });
       }
       return contact;
     } catch (e) {
       print("Exception thrown: ${e.toString()}");
     }
-
   }
 
   List<TableFormatter> _tableParse(Element tableData) {
     List<TableFormatter> tempList = new List<TableFormatter>();
     try {
       for (var tableElements in tableData.getElementsByTagName('table')) {
-        tableElements.getElementsByTagName('tbody').forEach((f){
-          f.getElementsByTagName('tr').forEach((x){
-          // MARK: table for course table
-          print("table:\n ${x.getElementsByTagName('td')[0].text};\n ${x.getElementsByTagName('td')[1].text};\n ${x.getElementsByTagName('td')[2].text};\n ${x.getElementsByTagName('td')[3].text};\n ${x.getElementsByTagName('td')[4].text};\n ${x.getElementsByTagName('td')[5].text};\n ${x.getElementsByTagName('td')[6].text}");
+        tableElements.getElementsByTagName('tbody').forEach((f) {
+          f.getElementsByTagName('tr').forEach((x) {
+            // MARK: table for course table
+            print(
+                "table:\n ${x.getElementsByTagName('td')[0].text};\n ${x.getElementsByTagName('td')[1].text};\n ${x.getElementsByTagName('td')[2].text};\n ${x.getElementsByTagName('td')[3].text};\n ${x.getElementsByTagName('td')[4].text};\n ${x.getElementsByTagName('td')[5].text};\n ${x.getElementsByTagName('td')[6].text}");
             tempList.add(new TableFormatter(
               courseTitle: x.getElementsByTagName('td')[0].text,
               lecturer: x.getElementsByTagName('td')[1].text,
@@ -217,19 +216,27 @@ class Scrape {
       return tempList;
     } catch (e) {}
   }
+
 // MARK: The headers and pre/post text of each table in view
   List<Element> _tableHeading(Element elementDocument) {
     // document = await _getWebResponse();
     List<Element> elementData = new List<Element>();
     try {
-      for (var elementIn in document.getElementsByClassName("region region-content")) {
-        for (var headingElements in elementIn.getElementsByClassName('field-item even')) {
-          for(var i = 0; i < elementIn.getElementsByClassName('field-item even').length; i++){
+      for (var elementIn
+          in document.getElementsByClassName("region region-content")) {
+        for (var headingElements
+            in elementIn.getElementsByClassName('field-item even')) {
+          for (var i = 0;
+              i < elementIn.getElementsByClassName('field-item even').length;
+              i++) {
             // elementData.add(headingElements.getElementsByTagName('h2')[i]);
             // print("Inner data: ${elementData.last.outerHtml}");
             // headingElements.getElementsByTagName('p')[i].text != "" ? elementData.add(headingElements.getElementsByTagName('p')[i]) : print("No Data for p.");
             // print("Inner data: ${elementData.last.outerHtml}");
-            headingElements.getElementsByTagName('center')[i].text != "" ? elementData.add(headingElements.getElementsByTagName('center')[i]) : print("No Data for center.");
+            headingElements.getElementsByTagName('center')[i].text != ""
+                ? elementData
+                    .add(headingElements.getElementsByTagName('center')[i])
+                : print("No Data for center.");
             print("Inner data: ${elementData.last.outerHtml}");
             // headingElements.getElementsByTagName('ul')[i].text != "" ? elementData.add(headingElements.getElementsByTagName('ul')[i]) : print("No Data for ul.");
             // print("Inner data: ${elementData.last.outerHtml}");
@@ -247,29 +254,35 @@ class Scrape {
     document = await _getWebResponse();
     List<Element> body = new List();
     try {
-      for (var element in document.getElementsByClassName("region region-content")) {
+      for (var element
+          in document.getElementsByClassName("region region-content")) {
         if (element.getElementsByTagName('table').isNotEmpty) {
           element.querySelector('table').remove();
         } else {
           var previousElement = element.getElementsByTagName('h2').first;
           body.add(element.getElementsByTagName('h2').first);
-            print(element.getElementsByClassName('field-item even').length);
-            element.getElementsByClassName('field field-name-field-pa-center-content field-type-text-long field-label-hidden').forEach((item){
-              // item.firstChild.remove();
+          print(element.getElementsByClassName('field-item even').length);
+          element
+              .getElementsByClassName(
+                  'field field-name-field-pa-center-content field-type-text-long field-label-hidden')
+              .forEach((item) {
+            // item.firstChild.remove();
 
-              for (var title in item.getElementsByTagName('h2')) {
-                print(title.innerHtml);
-                previousElement == title ? print('alternate header failed') : body.add(title);
-              }
-              for (var div in item.getElementsByTagName('p')) {
-                print(div.innerHtml);
-                body.add(div);
-              }
-              for (var bullet in item.getElementsByTagName('ul')) {
-                print(bullet.innerHtml);
-                body.add(bullet);
-              }
-            });
+            for (var title in item.getElementsByTagName('h2')) {
+              print(title.innerHtml);
+              previousElement == title
+                  ? print('alternate header failed')
+                  : body.add(title);
+            }
+            for (var div in item.getElementsByTagName('p')) {
+              print(div.innerHtml);
+              body.add(div);
+            }
+            for (var bullet in item.getElementsByTagName('ul')) {
+              print(bullet.innerHtml);
+              body.add(bullet);
+            }
+          });
         }
       }
     } catch (e) {
@@ -305,61 +318,19 @@ class Scrape {
   }
 
   String splitter(Element toSplit) {
-    int matchIndex = 0;
-    int startIndex = 0;
-
     String extract;
     print('Splitter:\n');
     if (toSplit.getElementsByTagName('a').isNotEmpty) {
       toSplit.getElementsByTagName('a').forEach((f) {
-        print('not empty');
-        var temp = f.outerHtml;
-        print("starting String: $temp");
-        if (temp.contains("href")) {
-          for (var i = 0; i < temp.length; i++) {
-            // Find first instance of "
-            if ('"' == temp[i] && startIndex == 0) {
-//          print('Found beginning instance of " in ${i.toString()}\n');
-              i++;
-              startIndex = i;
-            } else if ('"' == temp[i] && matchIndex == 0) {
-//          print('Found ending instance of " in ${i.toString()}\n');
-              matchIndex = i;
-            }
-          }
-          // print('in supstring: ${temp.substring(startIndex, matchIndex)}');
-          try {
-            extract = temp.substring(startIndex, matchIndex);
-          } catch (e){
-            print("Error thrown here: ${e.toString()}");
-          }
-        }
+        extract = f.attributes["href"].isNotEmpty
+            ? f.attributes["href"]
+            : "Null link";
+        return extract;
       });
     } else if (toSplit.getElementsByClassName('img').isNotEmpty) {
-      toSplit.getElementsByTagName('img').forEach((f){
-        print('not empty');
-        var temp = f.outerHtml;
-        print("starting String: $temp");
-        if (temp.contains("src")) {
-          for (var i = 0; i < temp.length; i++) {
-            // Find first instance of "
-            if ('"' == temp[i] && startIndex == 0) {
-//          print('Found beginning instance of " in ${i.toString()}\n');
-              i++;
-              startIndex = i;
-            } else if ('"' == temp[i] && matchIndex == 0) {
-//          print('Found ending instance of " in ${i.toString()}\n');
-              matchIndex = i;
-            }
-          }
-          // print('in supstring: ${temp.substring(startIndex, matchIndex)}');
-          try {
-            extract = temp.substring(startIndex, matchIndex);
-          } catch (e){
-            print("Error thrown here: ${e.toString()}");
-          }
-        }
-      });
+      extract = toSplit.attributes["src"].isNotEmpty
+          ? toSplit.attributes["src"]
+          : "Null link";
     }
     print(extract);
     return extract;
@@ -391,46 +362,53 @@ class Scrape {
     return navMenu;
   }
 
-Future <List> _getSideBar() async{
-  document = await _getWebResponse();
-  try{
-    print('sidebar navigation menu');
-    document.getElementsByTagName('ul').forEach((f){
-      for (var items in document.getElementsByClassName('manu nav')) {
-      print('${items.innerHtml}');
+  Future<List> _getSideBar() async {
+    document = await _getWebResponse();
+    try {
+      print('sidebar navigation menu');
+      document.getElementsByTagName('ul').forEach((f) {
+        for (var items in document.getElementsByClassName('manu nav')) {
+          print('${items.innerHtml}');
+        }
+      });
+    } catch (e) {
+      print('${e.toString()}');
     }
-    });
-  } catch (e){
-    print('${e.toString()}');
   }
-}
 
 // MARK: Gets and picture metadata
 
-  Future <String> _parseImages() async {
+  Future<String> _parseImages() async {
     document = await _getWebResponse();
     String images;
 
     return images;
   }
 
-  Future <List<Element>> _pageElements() async {
+  Future<List<Element>> _pageElements() async {
     document = await _getWebResponse();
     List<Element> currentPage = new List<Element>();
-    try{
-      for (var elements in document.getElementsByClassName("region region-content")) {
-        for (var items in elements.getElementsByClassName("field field-name-field-pa-center-content field-type-text-long field-label-hidden")){
-          for (var data in items.getElementsByClassName("field-item even")){
-            data.children.forEach((f){
-              f.children.forEach((x){
-                currentPage.add(x);
-              });
+    try {
+      for (var elements
+          in document.getElementsByClassName("region region-content")) {
+        for (var items in elements.getElementsByClassName(
+            "field field-name-field-pa-center-content field-type-text-long field-label-hidden")) {
+          for (var data in items.getElementsByClassName("field-item even")) {
+            data.children.forEach((f) {
+              if (f.toString() == "<html br>" || f.text == "") {
+                print("skip");
+              } else if (f.toString() == "<html center>") {
+                currentPage.addAll(f.children);
+              } else {
+                currentPage.add(f);
+              }
             });
+            // data.hasChildNodes() 
           }
         }
       }
       return currentPage;
-    } catch (e){
+    } catch (e) {
       print('${e.toString()}');
     }
   }
@@ -440,33 +418,44 @@ Future <List> _getSideBar() async{
     List<Element> listedContact = new List<Element>();
     List<ContactData> contactData = new List<ContactData>();
     ContactData person = new ContactData();
-    try{
-      for (var elements in document.getElementsByClassName("region region-content")) {
-        for (var items in elements.getElementsByClassName("field-items")){
-          for (var node in items.getElementsByClassName("field field-name-field-pa-center-content field-type-text-long field-label-hidden")) {
+    try {
+      for (var elements
+          in document.getElementsByClassName("region region-content")) {
+        for (var items in elements.getElementsByClassName("field-items")) {
+          for (var node in items.getElementsByClassName(
+              "field field-name-field-pa-center-content field-type-text-long field-label-hidden")) {
+            print(
+                "item from internal nodes: ${node.toString()}\n${node.innerHtml}");
 
-            print("item from internal nodes: ${node.toString()}\n${node.innerHtml}");
-            
-            listedContact.add(node);
+            // listedContact.add(node);
 
             break;
           }
         }
       }
       // traverses from start of page again
-      for (var elements in document.getElementsByClassName("region region-content")) {
+      for (var elements
+          in document.getElementsByClassName("region region-content")) {
         // print(elements.attributes["field-items"].toString());
-        for (var items in elements.getElementsByClassName("ds-3col-equal entity entity-paragraphs-item paragraphs-item-three-columns view-mode-full clearfix")){
-          for (var nodes in items.getElementsByClassName("field-items")) {
-
-            print("item from left nodes: ${nodes.toString()}\n${nodes.innerHtml}");
-            // _findContent(leftNode.children);
-            listedContact.addAll(_findContent(nodes.children));
-
+        for (var items in elements.getElementsByClassName(
+            "ds-3col-equal entity entity-paragraphs-item paragraphs-item-three-columns view-mode-full clearfix")) {
+          print("we grabbed from this loop");
+          for (var item in items.getElementsByClassName("group-left")) {
+            listedContact.addAll(_findContent(item.children));
           }
+          for (var item in items.getElementsByClassName("group-middle")) {
+            item.getElementsByTagName("img")?.first?.attributes["alt"] !=
+                    "SAIL Program Logo"
+                ? listedContact.addAll(_findContent(item.children))
+                : print("found the error");
+          }
+          for (var item in items.getElementsByClassName("group-right")) {
+            listedContact.addAll(_findContent(item.children));
+          }
+          print("${items.innerHtml}");
         }
       }
-    } catch (e){
+    } catch (e) {
       print('${e.toString()}');
     }
 
@@ -474,22 +463,23 @@ Future <List> _getSideBar() async{
   }
 
   // recursive function to find nested content within <html div>
-  List<Element> _findContent(List<Element> nestContent){
+  List<Element> _findContent(List<Element> nestContent) {
     List<Element> foundElement = new List<Element>();
-    for(var content in nestContent){
-      print("children: ${nestContent.toString()}");
-      if (content.hasChildNodes()) {
-        return _findContent(content.children);
-      } else {
-        // print("node Content:" + content?.text ?? "no Content");
-        // if (content?.text == null) {
-        //   nestContent.remove(content);
-        // } else {
-        //   foundElement.add(content);
-        // }
+    for (var content in nestContent) {
+      if (content.attributes["style"] != "text-align: center;" ||
+          content.hasChildNodes()) {
+        print("not empty");
+        // print(content.innerHtml);
+        foundElement.add(content);
+        // return _findContent(content.children);
+        return foundElement;
+      } else if (content.attributes["style"] == "text-align: center;") {
+        print("content");
+        // print(content.innerHtml);
+        foundElement.add(content);
+        return foundElement;
+      } else if (!content.hasChildNodes()) {
         foundElement.addAll(nestContent);
-//        foundElement.add(content);
-        print("hits return. current running size: ${foundElement.length}");
         return foundElement;
       }
     }
