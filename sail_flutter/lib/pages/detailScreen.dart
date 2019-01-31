@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:googleapis/calendar/v3.dart';
+import 'package:intl/intl.dart';
 
 class DetailScreen extends StatefulWidget {
   Event data;
@@ -17,7 +18,6 @@ final key = GlobalKey<DetailScreenState>();
 class DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
-    // print('Inside the expanded details screen: ${this.widget.data.summary}');
     return new Scaffold(
       body: new SafeArea(
         child: eventDetails(this.widget.data),
@@ -26,19 +26,12 @@ class DetailScreenState extends State<DetailScreen> {
   }
 
   Widget eventDetails(Event data) {
-    var formattedMinutesStart =
-        this.widget.data.start.dateTime.toLocal().minute;
-    var formattedMinutesEnd = this.widget.data.end.dateTime.toLocal().minute;
-    String formattedStringStart;
-    String formattedStringEnd;
+   
+   var dateFormat = new DateFormat('jm');
 
-    if (formattedMinutesStart <= 9) {
-      formattedStringStart = "0$formattedMinutesStart";
-    }
+   String formattedStartDate = dateFormat.format(this.widget.data.start.dateTime.toLocal());
 
-    if (formattedMinutesEnd <= 9) {
-      formattedStringEnd = "0$formattedMinutesEnd";
-    }
+   String formattedEndDate = dateFormat.format(this.widget.data.end.dateTime.toLocal());
 
     return new Container(
       padding: const EdgeInsets.all(10.0),
@@ -58,7 +51,7 @@ class DetailScreenState extends State<DetailScreen> {
           new Divider(),
           timetoText(this.widget.data.start.dateTime),
           new Text(
-              'Starting at: ${this.widget.data.start.dateTime.toLocal().hour}:$formattedStringStart\nEnding at: ${this.widget.data.end.dateTime.toLocal().hour}:$formattedStringEnd'),
+              'Starting at: $formattedStartDate\nEnding at: $formattedEndDate'),
           new Text('Inside: ${this.widget.data.location}'),
         ],
       ),

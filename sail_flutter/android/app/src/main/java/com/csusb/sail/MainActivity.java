@@ -1,4 +1,4 @@
-package com.example.carboncopy;
+package com.csusb.sail;
 
 import android.os.Bundle;
 

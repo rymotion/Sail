@@ -65,14 +65,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 children: <Widget>[
                   Container(
                     padding: const EdgeInsets.all(10.0),
-                    height: 300.0,
+                    height: 350.0,
                     child: _isHappeningNow(),
                   ),
                   Divider(),
                   Text("Upcoming Events"),
                   Container(
                       padding: const EdgeInsets.all(10.0),
-                      height: 200.0,
+                      height: 350.0,
                       child: _loadCalendar(calendarHandler.future_Events)),
                   Divider(),
                   Text("Past Events"),

@@ -35,8 +35,8 @@ class CalDevParse {
   // Future<bool> get initRoomCal => _initRoom();
   Future<Events> get eventList => _getEvents();
   Future<Events> get pastEvent => _getPastEvents();
-  Future<Events> get future_Events => _getOpen();
-  Future<Events> get past_Events => _getRoomStatus();
+  Future<Events> get future_Events => _futureEvents();
+  Future<Events> get past_Events => _pastEvents();
   Future<Events> get runningCurrEvent => _currentlyRunningEvents();
   Events get lineUp => currLine;
 
@@ -88,7 +88,7 @@ class CalDevParse {
     return returnOnHit;
   }
 
-  Future<Events> _getOpen() async {
+  Future<Events> _futureEvents() async {
     Events returnOnHit = new Events();
     var completer = new Completer();
     await clientViaServiceAccount(accountCredentials, _scopes)
@@ -102,7 +102,10 @@ class CalDevParse {
       try {
         var result = await calendar.events
             .list('moe6r4aen5mu8aelggtli24q3k@group.calendar.google.com',
-                singleEvents: false, timeMin: now.toUtc(), timeMax: week.toUtc());
+                singleEvents: true, timeMin: now.toUtc(), timeMax: week.toUtc(), orderBy:"startTime");
+        result.items = result.items.toList();
+
+        print("current running list: ${result.items}");
         returnOnHit = result;
         return returnOnHit;
       } catch (e) {
@@ -114,7 +117,7 @@ class CalDevParse {
     return returnOnHit;
   }
 
-  Future <Events> _getRoomStatus() async {
+  Future <Events> _pastEvents() async {
     Events returnOnHit = new Events();
     var completer = new Completer();
     await clientViaServiceAccount(accountCredentials, _scopes)
@@ -128,7 +131,7 @@ class CalDevParse {
       try {
         var result = await calendar.events
             .list('moe6r4aen5mu8aelggtli24q3k@group.calendar.google.com',
-                singleEvents: false, timeMax: now.toUtc(), timeMin: week.toUtc(),);
+                singleEvents: false, timeMax: now.toUtc(), timeMin: week.toUtc());
         returnOnHit = result;
         returnOnHit.items = returnOnHit.items.reversed.toList();
         return returnOnHit;
