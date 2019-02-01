@@ -88,11 +88,11 @@ class _MainDrawerState extends State<MainDrawer> {
       elementURL: "/contact",
       elementAccessible: "",
     ));
-    list.add(new ElementFormatter(
-      elementHeader: "Event Check-In",
-      elementURL: "/check-in",
-      elementAccessible: "",
-    ));
+    // list.add(new ElementFormatter(
+    //   elementHeader: "Event Check-In",
+    //   elementURL: "/check-in",
+    //   elementAccessible: "",
+    // ));
   }
 
   reload() async {
